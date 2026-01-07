@@ -1,17 +1,6 @@
 using UnityEngine;
 
 /// <summary>
-/// 角色類型枚舉：定義三種可選的黑暗角色
-/// 每種角色可以有不同的視覺效果和行為（未來可擴展）
-/// </summary>
-public enum CharacterType 
-{ 
-    Skeleton,      // 骷髏死神 - 骨頭碎裂效果
-    CursedGirl,    // 被詛咒的女子 - 靈魂飄散效果
-    DarkCreature   // 黑暗生物 - 黑霧籠罩效果
-}
-
-/// <summary>
 /// 黑暗墜落控制器：管理角色從高空墜落的完整生命週期
 /// 
 /// 功能包含：
@@ -27,6 +16,15 @@ public enum CharacterType
 /// </summary>
 public class DarkFallController : MonoBehaviour
 {
+    /// <summary>
+    /// 角色類型枚舉：定義三種可選的黑暗角色
+    /// </summary>
+    public enum CharacterType 
+    { 
+        Skeleton,      // 骷髏死神 - 骨頭碎裂效果
+        CursedGirl,    // 被詛咒的女子 - 靈魂飄散效果
+        DarkCreature   // 黑暗生物 - 黑霧籠罩效果
+    }
     // ==================== 公開參數（可在 Inspector 調整）====================
     
     [Header("角色設定")]
@@ -371,3 +369,7 @@ public class DarkFallController : MonoBehaviour
  * 理念：重點不是誰打的字，而是理解邏輯、能維護、能改進
  * 日期：2026-01-08
  */
+
+
+
+// Recompile trigger
