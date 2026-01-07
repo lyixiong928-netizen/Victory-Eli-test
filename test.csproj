@@ -1,16 +1,35 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
-    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <!-- 排除 Unity 相關的所有檔案和資料夾 -->
+    <Compile Remove="Assets\**" />
+    <Compile Remove="Packages\**" />
+    <Compile Remove="ProjectSettings\**" />
+    <Compile Remove="UserSettings\**" />
+    <Compile Remove="Library\**" />
+    <Compile Remove="Temp\**" />
+    
+    <EmbeddedResource Remove="Assets\**" />
+    <EmbeddedResource Remove="Packages\**" />
+    <EmbeddedResource Remove="ProjectSettings\**" />
+    <EmbeddedResource Remove="UserSettings\**" />
+    <EmbeddedResource Remove="Library\**" />
+    <EmbeddedResource Remove="Temp\**" />
+    
+    <None Remove="Assets\**" />
+    <None Remove="Packages\**" />
+    <None Remove="ProjectSettings\**" />
+    <None Remove="UserSettings\**" />
+    <None Remove="Library\**" />
+    <None Remove="Temp\**" />
   </ItemGroup>
 
 </Project>
