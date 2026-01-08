@@ -6,11 +6,8 @@ using System.Collections;
 /// </summary>
 public class CameraShake : MonoBehaviour
 {
-    [Header("震動設定")]
-    [Tooltip("是否正在震動")]
+    // 震動設定
     private bool isShaking = false;
-    
-    [Tooltip("原始位置")]
     private Vector3 originalPosition;
     
     void Start()

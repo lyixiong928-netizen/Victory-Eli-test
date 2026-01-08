@@ -30,7 +30,8 @@ public class CharacterAnimator : MonoBehaviour
     
     // 組件
     private SpriteRenderer spriteRenderer;
-    private DarkFallController fallController;
+    // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
+    // private DarkFallController fallController;
     
     // 鬼影系統
     private float ghostSpawnTimer = 0f;
@@ -39,7 +40,8 @@ public class CharacterAnimator : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        fallController = GetComponent<DarkFallController>();
+        // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
+        // fallController = GetComponent<DarkFallController>();
         
         // 創建鬼影父物件
         if (enableGhostTrail)
@@ -57,14 +59,18 @@ public class CharacterAnimator : MonoBehaviour
     
     void Update()
     {
-        // 鬼影拖尾效果
-        if (enableGhostTrail && fallController && !fallController.GetComponent<DarkFallController>().enabled)
+        // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
+        /*
+        // 鬼影拖尾效果 - 只在墜落中才生成鬼影
+        if (enableGhostTrail && fallController != null)
         {
-            return; // 如果已著地，停止生成鬼影
-        }
-        
-        if (enableGhostTrail)
-        {
+            // 檢查是否已著地（透過檢查Y座標）
+            bool hasLanded = transform.position.y <= 0;
+            if (hasLanded)
+            {
+                return; // 如果已著地，停止生成鬼影
+            }
+            
             ghostSpawnTimer += Time.deltaTime;
             if (ghostSpawnTimer >= ghostSpawnInterval)
             {
@@ -78,6 +84,7 @@ public class CharacterAnimator : MonoBehaviour
         {
             UpdateColorBasedOnFall();
         }
+        */
     }
     
     /// <summary>
@@ -85,7 +92,7 @@ public class CharacterAnimator : MonoBehaviour
     /// </summary>
     void CreateGhostSprite()
     {
-        if (spriteRenderer == null || spriteRenderer.sprite == null) return;
+        if (spriteRenderer == null || spriteRenderer.sprite == null || ghostParent == null) return;
         
         GameObject ghost = new GameObject("Ghost");
         ghost.transform.SetParent(ghostParent.transform);
@@ -106,7 +113,9 @@ public class CharacterAnimator : MonoBehaviour
     
     /// <summary>
     /// 根據墜落進度更新顏色
+    /// FIXME: Unity 6.3 LTS 編譯問題，暫時註解
     /// </summary>
+    /*
     void UpdateColorBasedOnFall()
     {
         // 這裡可以根據 fallController 的狀態來改變顏色
@@ -118,6 +127,7 @@ public class CharacterAnimator : MonoBehaviour
             spriteRenderer.color = newColor;
         }
     }
+    */
     
     /// <summary>
     /// 設置預設顏色漸變
