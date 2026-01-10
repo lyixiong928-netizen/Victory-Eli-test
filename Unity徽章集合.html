@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victory-Eli Unity Pro 徽章</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .badge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .badge {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .badge:hover {
+            transform: translateY(-10px);
+        }
+        
+        .badge svg {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+        
+        .badge h3 {
+            color: #333;
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        
+        .badge p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: opacity 0.3s;
+        }
+        
+        .download-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏆 Victory-Eli Unity 專屬徽章集 🏆</h1>
+    
+    <div class="badge-container">
+        <!-- Unity Pro 徽章 -->
+        <div class="badge">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="95" fill="#222C37" stroke="#00D1FF" stroke-width="3"/>
+                <path d="M 100 20 L 120 60 L 165 60 L 130 90 L 145 135 L 100 105 L 55 135 L 70 90 L 35 60 L 80 60 Z" fill="#00D1FF"/>
+                <text x="100" y="170" font-size="16" fill="white" text-anchor="middle" font-weight="bold">UNITY PRO</text>
+            </svg>
+            <h3>Unity Pro 開發者</h3>
+            <p>組織: lyixiong928</p>
+            <p>授權日期: 2026年1月</p>
+            <button class="download-btn" onclick="downloadSVG('unity-pro')">下載徽章</button>
+        </div>
+        
+        <!-- Victory-Eli 專案徽章 -->
+        <div class="badge">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="95" fill="url(#grad1)" stroke="#FFF" stroke-width="3"/>
+                <text x="100" y="80" font-size="48" fill="white" text-anchor="middle" font-weight="bold">V</text>
+                <text x="100" y="110" font-size="20" fill="white" text-anchor="middle">VICTORY</text>
+                <text x="100" y="130" font-size="16" fill="white" text-anchor="middle">ELI</text>
+                <text x="100" y="160" font-size="12" fill="white" text-anchor="middle">Dark Descent</text>
+            </svg>
+            <h3>Victory-Eli 創作者</h3>
+            <p>Dark Descent 遊戲開發</p>
+            <p>2026 專案</p>
+            <button class="download-btn" onclick="downloadSVG('victory-eli')">下載徽章</button>
+        </div>
+        
+        <!-- 認證開發者徽章 -->
+        <div class="badge">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="95" fill="url(#grad2)" stroke="#FFD700" stroke-width="3"/>
+                <circle cx="100" cy="100" r="70" fill="none" stroke="white" stroke-width="2"/>
+                <text x="100" y="95" font-size="40" fill="white" text-anchor="middle" font-weight="bold">✓</text>
+                <text x="100" y="130" font-size="14" fill="white" text-anchor="middle" font-weight="bold">CERTIFIED</text>
+                <text x="100" y="150" font-size="12" fill="white" text-anchor="middle">DEVELOPER</text>
+            </svg>
+            <h3>認證開發者</h3>
+            <p>Unity 遊戲開發專家</p>
+            <p>2D/3D 開發認證</p>
+            <button class="download-btn" onclick="downloadSVG('certified')">下載徽章</button>
+        </div>
+        
+        <!-- GitHub 風格徽章 -->
+        <div class="badge">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <rect width="200" height="200" rx="20" fill="#24292e"/>
+                <circle cx="100" cy="70" r="30" fill="#0366d6"/>
+                <path d="M 100 100 L 100 140" stroke="#0366d6" stroke-width="4"/>
+                <circle cx="70" cy="160" r="8" fill="#0366d6"/>
+                <circle cx="100" cy="160" r="8" fill="#0366d6"/>
+                <circle cx="130" cy="160" r="8" fill="#0366d6"/>
+                <text x="100" y="195" font-size="12" fill="white" text-anchor="middle" font-weight="bold">Unity Developer</text>
+            </svg>
+            <h3>GitHub 風格</h3>
+            <p>開源專案貢獻者</p>
+            <p>Victory-Eli-test</p>
+            <button class="download-btn" onclick="downloadSVG('github-style')">下載徽章</button>
+        </div>
+    </div>
+    
+    <script>
+        function downloadSVG(type) {
+            const badge = event.target.previousElementSibling.previousElementSibling.previousElementSibling;
+            const svgData = badge.innerHTML;
+            const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+${svgData}
+</svg>`;
+            
+            const blob = new Blob([svg], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `victory-eli-${type}-badge.svg`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert('徽章已下載！✨');
+        }
+    </script>
+</body>
+</html>

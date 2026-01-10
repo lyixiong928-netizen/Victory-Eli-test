@@ -30,8 +30,7 @@ public class CharacterAnimator : MonoBehaviour
     
     // 組件
     private SpriteRenderer spriteRenderer;
-    // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
-    // private DarkFallController fallController;
+    private DarkDescentController fallController;
     
     // 鬼影系統
     private float ghostSpawnTimer = 0f;
@@ -40,8 +39,7 @@ public class CharacterAnimator : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
-        // fallController = GetComponent<DarkFallController>();
+        fallController = GetComponent<DarkDescentController>();
         
         // 創建鬼影父物件
         if (enableGhostTrail)
@@ -59,8 +57,6 @@ public class CharacterAnimator : MonoBehaviour
     
     void Update()
     {
-        // FIXME: Unity 6.3 LTS 編譯問題，暫時註解
-        /*
         // 鬼影拖尾效果 - 只在墜落中才生成鬼影
         if (enableGhostTrail && fallController != null)
         {
@@ -84,7 +80,6 @@ public class CharacterAnimator : MonoBehaviour
         {
             UpdateColorBasedOnFall();
         }
-        */
     }
     
     /// <summary>
@@ -113,9 +108,7 @@ public class CharacterAnimator : MonoBehaviour
     
     /// <summary>
     /// 根據墜落進度更新顏色
-    /// FIXME: Unity 6.3 LTS 編譯問題，暫時註解
     /// </summary>
-    /*
     void UpdateColorBasedOnFall()
     {
         // 這裡可以根據 fallController 的狀態來改變顏色
@@ -127,7 +120,6 @@ public class CharacterAnimator : MonoBehaviour
             spriteRenderer.color = newColor;
         }
     }
-    */
     
     /// <summary>
     /// 設置預設顏色漸變

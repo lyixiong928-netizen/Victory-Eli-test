@@ -14,7 +14,7 @@ using UnityEngine;
 /// 作者：使用 AI 輔助開發，理解並可維護
 /// 日期：2026-01-08
 /// </summary>
-public class DarkFallController : MonoBehaviour
+public class DarkDescentController : MonoBehaviour
 {
     /// <summary>
     /// 角色類型枚舉：定義三種可選的黑暗角色
@@ -111,7 +111,7 @@ public class DarkFallController : MonoBehaviour
         if (soundManager) soundManager.PlayWindSound();
         
         // 在 Console 中輸出開始訊息
-        Debug.Log($"[DarkFall] {character} 開始從 {initialHeight}m 高度墜落");
+        Debug.Log($"[DarkDescent] {character} 開始從 {initialHeight}m 高度墜落");
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class DarkFallController : MonoBehaviour
         // 按下 R 鍵：重置墜落（重新開始）
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("[DarkFall] 玩家按下 R 鍵，重置墜落");
+            Debug.Log("[DarkDescent] 玩家按下 R 鍵，重置墜落");
             ResetFall();
         }
         
@@ -180,7 +180,7 @@ public class DarkFallController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             showDebugInfo = !showDebugInfo;
-            Debug.Log($"[DarkFall] Debug 資訊顯示：{(showDebugInfo ? "開啟" : "關閉")}");
+            Debug.Log($"[DarkDescent] Debug 資訊顯示：{(showDebugInfo ? "開啟" : "關閉")}");
         }
     }
     
@@ -266,7 +266,7 @@ public class DarkFallController : MonoBehaviour
         
         // === 輸出著地統計資訊 ===
         
-        Debug.Log($"[DarkFall] 著地！統計資訊：");
+        Debug.Log($"[DarkDescent] 著地！統計資訊：");
         Debug.Log($"  - 墜落時間：{fallTime:F2} 秒");
         Debug.Log($"  - 墜落距離：{fallDistance:F2} 米");
         Debug.Log($"  - 著地速度：{maxVelocityReached:F2} m/s");
@@ -303,7 +303,7 @@ public class DarkFallController : MonoBehaviour
         // 重新播放風聲
         if (soundManager) soundManager.PlayWindSound();
         
-        Debug.Log("[DarkFall] 已重置墜落狀態");
+        Debug.Log("[DarkDescent] 已重置墜落狀態");
     }
 
     // ==================== 公開屬性（供其他腳本讀取狀態）====================
@@ -354,7 +354,7 @@ public class DarkFallController : MonoBehaviour
  *    - 按 D 鍵：顯示/隱藏 Debug 資訊
  * 
  * 4. 程式呼叫方式：
- *    DarkFallController controller = GetComponent<DarkFallController>();
+ *    DarkDescentController controller = GetComponent<DarkDescentController>();
  *    controller.ResetFall();  // 程式觸發重置
  *    float speed = controller.CurrentVelocity;  // 讀取速度
  * 
