@@ -158,6 +158,7 @@ public class ParticleEffectManager : MonoBehaviour
         velocityOverLifetime.space = ParticleSystemSimulationSpace.Local;
         velocityOverLifetime.orbitalX = new ParticleSystem.MinMaxCurve(0.5f, 1f);
         velocityOverLifetime.orbitalY = new ParticleSystem.MinMaxCurve(0.5f, 1f);
+        velocityOverLifetime.orbitalZ = new ParticleSystem.MinMaxCurve(0f, 0f); // 確保所有軸使用相同模式
     }
     
     /// <summary>

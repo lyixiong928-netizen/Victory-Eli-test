@@ -202,16 +202,16 @@ public class SceneValidator : EditorWindow
             Log("✅ Sprite 已指派: " + sr.sprite.name);
         }
         
-        // 檢查 DarkFallController
-        DarkFallController controller = character.GetComponent<DarkFallController>();
+        // 檢查 DarkDescentController
+        DarkDescentController controller = character.GetComponent<DarkDescentController>();
         if (controller == null)
         {
             characterValid = false;
-            Log("❌ 錯誤：缺少 DarkFallController 組件");
+            Log("❌ 錯誤：缺少 DarkDescentController 組件");
             return;
         }
         
-        Log("✅ DarkFallController 組件已安裝");
+        Log("✅ DarkDescentController 組件已安裝");
         
         // 檢查 CharacterAnimator
         CharacterAnimator animator = character.GetComponent<CharacterAnimator>();
@@ -380,7 +380,7 @@ public class SceneValidator : EditorWindow
         // 檢查主要腳本
         var scripts = new string[]
         {
-            "DarkFallController",
+            "DarkDescentController",
             "CameraShake",
             "ParticleEffectManager",
             "SoundManager",
@@ -451,10 +451,10 @@ public class SceneValidator : EditorWindow
                     character.AddComponent<SpriteRenderer>();
                     Log("✅ 已添加 SpriteRenderer 組件");
                 }
-                if (character.GetComponent<DarkFallController>() == null)
+                if (character.GetComponent<DarkDescentController>() == null)
                 {
-                    character.AddComponent<DarkFallController>();
-                    Log("✅ 已添加 DarkFallController 組件");
+                    character.AddComponent<DarkDescentController>();
+                    Log("✅ 已添加 DarkDescentController 組件");
                 }
                 characterValid = true;
             }

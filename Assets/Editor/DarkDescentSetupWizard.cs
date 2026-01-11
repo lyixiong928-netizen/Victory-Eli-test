@@ -91,7 +91,7 @@ public class DarkDescentSetupWizard : EditorWindow
         if (mainCamera != null)
         {
             mainCamera.clearFlags = CameraClearFlags.SolidColor;
-            mainCamera.backgroundColor = new Color(0.05f, 0.05f, 0.1f); // 深藍黑色
+            mainCamera.backgroundColor = Color.black; // 純黑色背景
             mainCamera.orthographic = true;
             mainCamera.orthographicSize = 10f;
             
@@ -122,7 +122,7 @@ public class DarkDescentSetupWizard : EditorWindow
         charRenderer.sortingOrder = 10;
         
         // 加入主控制器
-        DarkFallController controller = fallingCharacter.AddComponent<DarkFallController>();
+        DarkDescentController controller = fallingCharacter.AddComponent<DarkDescentController>();
         
         // 加入動畫控制器
         fallingCharacter.AddComponent<CharacterAnimator>();
@@ -158,7 +158,6 @@ public class DarkDescentSetupWizard : EditorWindow
         ground.transform.position = new Vector3(0, -10, 0);
         BoxCollider2D groundCollider = ground.AddComponent<BoxCollider2D>();
         groundCollider.size = new Vector2(100, 1);
-        ground.tag = "Ground";
         
         // 儲存場景
         statusMessage = "儲存場景...";
