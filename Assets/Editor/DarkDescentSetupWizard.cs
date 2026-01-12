@@ -52,6 +52,15 @@ public class DarkDescentSetupWizard : EditorWindow
         GUI.backgroundColor = new Color(0.3f, 0.7f, 1f);
         if (GUILayout.Button("🚀 開始自動設定", GUILayout.Height(50)))
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog(
+                    "無法執行",
+                    "請先停止 Play 模式，再使用此工具進行場景設定。",
+                    "確定"
+                );
+                return;
+            }
             SetupCompleteScene();
         }
         GUI.backgroundColor = Color.white;
