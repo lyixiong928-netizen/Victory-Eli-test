@@ -3,32 +3,49 @@ using UnityEngine;
 /// <summary>
 /// 黑暗墜落控制器：管理角色從高空墜落的完整生命週期
 /// 
+/// 【同命蠱的詛咒】故事背景：
+/// 三個靈魂被同命蠱綁定，共享生命與命運。
+/// 當其中一人墜落，其他兩人的靈魂也會隨之顯現，
+/// 在無盡的黑暗中循環墜落，無法逃脫這個詛咒。
+/// 
+/// 角色說明：
+/// - 骷髏死神 (Skeleton)：最先被詛咒的靈魂，骨骼碎裂卻無法死去
+/// - 被詛咒的女子 (CursedGirl)：無辜受牽連，靈魂被撕裂
+/// - 黑暗生物 (DarkCreature)：詛咒的化身，黑霧纏繞的怨念
+/// 
 /// 功能包含：
 /// - 真實物理模擬（重力、空氣阻力）
 /// - 動態視覺效果（粒子系統、旋轉動畫）
 /// - 音效管理（風聲、著地撞擊）
 /// - 鏡頭震動（著地衝擊感）
+/// - 同命蠱特效（三個靈魂的連結顯示）
 /// - Debug 資訊顯示（按 D 鍵）
 /// - 快速重置（按 R 鍵）
 /// 
 /// 作者：使用 AI 輔助開發，理解並可維護
-/// 日期：2026-01-08
+/// 日期：2026-01-12
 /// </summary>
 public class DarkDescentController : MonoBehaviour
 {
     /// <summary>
-    /// 角色類型枚舉：定義三種可選的黑暗角色
+    /// 角色類型枚舉：定義三種被同命蠱詛咒的角色
     /// </summary>
     public enum CharacterType 
     { 
-        Skeleton,      // 骷髏死神 - 骨頭碎裂效果
-        CursedGirl,    // 被詛咒的女子 - 靈魂飄散效果
-        DarkCreature   // 黑暗生物 - 黑霧籠罩效果
+        Skeleton,      // 骷髏死神 - 第一個被詛咒者，骨頭碎裂效果
+        CursedGirl,    // 被詛咒的女子 - 無辜受害者，靈魂飄散效果
+        DarkCreature   // 黑暗生物 - 詛咒的化身，黑霧籠罩效果
     }
     // ==================== 公開參數（可在 Inspector 調整）====================
     
-    [Header("角色設定")]
+    [Header("同命蠱詛咒設定")]
     public CharacterType character = CharacterType.CursedGirl;  // 選擇的角色類型
+    
+    [Tooltip("是否顯示同命蠱連結特效")]
+    public bool showCurseLink = true;
+    
+    [Tooltip("詛咒連結粒子系統（三個靈魂的連結線）")]
+    public ParticleSystem curseLinkParticles;
 
     [Header("物理參數")]
     [Tooltip("重力加速度（米/秒²），地球標準為 9.8")]
@@ -47,6 +64,14 @@ public class DarkDescentController : MonoBehaviour
     [Header("視覺效果")]
     [Tooltip("骨頭碎片粒子系統（墜落時持續播放）")]
     public ParticleSystem boneFragments;
+    
+    [Header("精靈動畫設定")]
+    [Tooltip("動畫用的精靈圖片陣列（將切片幀拖入此處）")]
+    public Sprite[] animationSprites;
+    
+    [Tooltip("每秒播放幾幀 (FPS)")]
+    [Range(1, 60)]
+    public int framesPerSecond = 12;
     
     [Tooltip("黑暗霧氣粒子系統（墜落時持續播放）")]
     public ParticleSystem darkFog;
@@ -81,6 +106,10 @@ public class DarkDescentController : MonoBehaviour
     private Vector3 startPosition;            // 起始位置（用於重置）
     private SpriteRenderer spriteRenderer;    // 精靈渲染器引用
     private float maxVelocityReached = 0f;    // 達到的最大速度（用於統計）
+    
+    // 動畫相關
+    private int currentFrame = 0;             // 當前動畫幀
+    private float animationTimer = 0f;        // 動畫計時器
 
     // ==================== Unity 生命週期方法 ====================
     
@@ -103,15 +132,32 @@ public class DarkDescentController : MonoBehaviour
         fallDistance = 0f;
         maxVelocityReached = 0f;
         
+        // 初始化動畫
+        currentFrame = 0;
+        animationTimer = 0f;
+        if (animationSprites != null && animationSprites.Length > 0 && spriteRenderer != null)
+        {
+            spriteRenderer.sprite = animationSprites[0];
+        }
+        
         // 啟動墜落時的視覺效果
         if (darkFog) darkFog.Play();           // 播放黑暗霧氣
         if (boneFragments) boneFragments.Play(); // 播放骨頭碎片
         
+        // 啟動同命蠱連結特效
+        if (showCurseLink && curseLinkParticles) 
+        {
+            curseLinkParticles.Play();
+            Debug.Log("[同命蠱] 詛咒連結已啟動");
+        }
+        
         // 播放風聲音效（循環播放）
         if (soundManager) soundManager.PlayWindSound();
         
-        // 在 Console 中輸出開始訊息
-        Debug.Log($"[DarkDescent] {character} 開始從 {initialHeight}m 高度墜落");
+        // 在 Console 中輸出開始訊息（包含詛咒背景）
+        string curseMessage = GetCurseMessage();
+        Debug.Log($"[同命蠱] {character} 開始從 {initialHeight}m 高度墜落");
+        Debug.Log($"[詛咒] {curseMessage}");
     }
 
     /// <summary>
@@ -158,6 +204,9 @@ public class DarkDescentController : MonoBehaviour
             // 產生翻滾墜落的視覺效果
             if (rotateWhileFalling)
                 transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            
+            // === 精靈動畫更新 ===
+            UpdateSpriteAnimation();
 
             // === 著地檢測 ===
             
@@ -181,6 +230,38 @@ public class DarkDescentController : MonoBehaviour
         {
             showDebugInfo = !showDebugInfo;
             Debug.Log($"[DarkDescent] Debug 資訊顯示：{(showDebugInfo ? "開啟" : "關閉")}");
+        }
+    }
+    
+    /// <summary>
+    /// 更新精靈動畫播放
+    /// </summary>
+    void UpdateSpriteAnimation()
+    {
+        // 如果沒有設定動畫精靈，直接返回
+        if (animationSprites == null || animationSprites.Length == 0 || spriteRenderer == null)
+            return;
+        
+        // 計算每幀的時間
+        float frameTime = 1f / framesPerSecond;
+        
+        // 累加計時器
+        animationTimer += Time.deltaTime;
+        
+        // 當計時器超過一幀的時間時，切換到下一幀
+        if (animationTimer >= frameTime)
+        {
+            animationTimer -= frameTime;
+            currentFrame++;
+            
+            // 如果播放完所有幀，循環回到第一幀
+            if (currentFrame >= animationSprites.Length)
+            {
+                currentFrame = 0;
+            }
+            
+            // 更新顯示的精靈圖
+            spriteRenderer.sprite = animationSprites[currentFrame];
         }
     }
     
@@ -305,6 +386,24 @@ public class DarkDescentController : MonoBehaviour
         
         Debug.Log("[DarkDescent] 已重置墜落狀態");
     }
+    
+    /// <summary>
+    /// 根據角色類型返回對應的詛咒訊息
+    /// </summary>
+    private string GetCurseMessage()
+    {
+        switch (character)
+        {
+            case CharacterType.Skeleton:
+                return "骷髏死神的骨骼碎裂，卻無法真正死去。三個靈魂，一個命運...";
+            case CharacterType.CursedGirl:
+                return "無辜的靈魂被撕裂，在黑暗中永恆墜落。同命蠱的詛咒無法掙脫...";
+            case CharacterType.DarkCreature:
+                return "詛咒的化身，黑霧纏繞的怨念。三個靈魂共享著無盡的痛苦...";
+            default:
+                return "同命蠱的詛咒綁定了三個靈魂，共享命運，無法逃脫...";
+        }
+    }
 
     // ==================== 公開屬性（供其他腳本讀取狀態）====================
     
@@ -342,20 +441,29 @@ public class DarkDescentController : MonoBehaviour
 /* 
  * ==================== 使用說明 ====================
  * 
+ * 【同命蠱的詛咒】故事說明：
+ * 三個不同的靈魂被古老的同命蠱所束縛，他們的命運交織在一起。
+ * 當一個靈魂墜落時，其他兩個也會感受到同樣的痛苦。
+ * 這是一個無盡的循環，直到詛咒被解除...
+ * 
  * 1. 將此腳本附加到角色 GameObject 上
  * 2. 在 Inspector 中設定參數：
- *    - 選擇角色類型
+ *    - 選擇角色類型（三個被詛咒的靈魂之一）
  *    - 調整物理參數（重力、最大速度等）
- *    - 拖入粒子系統引用
+ *    - 拖入粒子系統引用（包括同命蠱連結特效）
  *    - 拖入 SoundManager 引用
  * 
  * 3. 操作方式：
- *    - 按 R 鍵：重置墜落
+ *    - 按 R 鍵：重置墜落（重新體驗詛咒）
  *    - 按 D 鍵：顯示/隱藏 Debug 資訊
  * 
  * 4. 程式呼叫方式：
  *    DarkDescentController controller = GetComponent<DarkDescentController>();
  *    controller.ResetFall();  // 程式觸發重置
+ * 
+ * 5. 同命蠱特效：
+ *    - 啟用 showCurseLink 顯示三個靈魂的連結
+ *    - 設定 curseLinkParticles 來顯示詛咒的視覺效果
  *    float speed = controller.CurrentVelocity;  // 讀取速度
  * 
  * 5. 未來改進方向：
