@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ColorSetup : Editor
 {
-    [MenuItem("DarkDescentDemo/顏色設定/開啟顏色調整器")]
+    [MenuItem("Dark Descent/顏色設定/開啟顏色調整器")]
     public static void OpenColorAdjuster()
     {
         GameObject selected = Selection.activeGameObject;

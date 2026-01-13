@@ -161,8 +161,6 @@ public class ColorHarmonyManager : MonoBehaviour
             
             targetColors[i] = Color.HSVToRGB(newH, newS, newV);
         }
-        
-        Debug.Log($"🎨 顏色協調已更新：{harmonyMode} 模式");
     }
     
     // 手動設定協調模式

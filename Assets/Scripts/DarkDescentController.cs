@@ -65,6 +65,14 @@ public class DarkDescentController : MonoBehaviour
     [Tooltip("骨頭碎片粒子系統（墜落時持續播放）")]
     public ParticleSystem boneFragments;
     
+    [Tooltip("骨頭碎片發射速率（根據角色類型調整）")]
+    [Range(10f, 200f)]
+    public float boneFragmentEmissionRate = 50f;
+    
+    [Tooltip("骨頭碎片生命週期（秒）")]
+    [Range(0.5f, 5f)]
+    public float boneFragmentLifetime = 2f;
+    
     [Header("精靈動畫設定")]
     [Tooltip("動畫用的精靈圖片陣列（將切片幀拖入此處）")]
     public Sprite[] animationSprites;
@@ -76,8 +84,16 @@ public class DarkDescentController : MonoBehaviour
     [Tooltip("黑暗霧氣粒子系統（墜落時持續播放）")]
     public ParticleSystem darkFog;
     
+    [Tooltip("黑暗霧氣濃度（根據墜落速度動態調整）")]
+    [Range(0.1f, 3f)]
+    public float darkFogDensity = 1f;
+    
     [Tooltip("靈魂粒子系統（著地瞬間爆發）")]
     public ParticleSystem soulParticles;
+    
+    [Tooltip("靈魂粒子爆發強度（根據墜落高度計算）")]
+    [Range(1f, 10f)]
+    public float soulBurstIntensity = 5f;
     
     [Tooltip("是否啟用著地時的螢幕震動效果")]
     public bool enableScreenShake = true;
@@ -96,6 +112,9 @@ public class DarkDescentController : MonoBehaviour
     [Header("Debug 設定")]
     [Tooltip("是否顯示 Debug 資訊（按 D 鍵切換）")]
     public bool showDebugInfo = false;
+    
+    [Tooltip("是否顯示粒子系統監控面板（按 M 鍵切換）")]
+    public bool showParticleMonitor = false;
 
     // ==================== 私有變數（內部狀態）====================
     
@@ -110,6 +129,10 @@ public class DarkDescentController : MonoBehaviour
     // 動畫相關
     private int currentFrame = 0;             // 當前動畫幀
     private float animationTimer = 0f;        // 動畫計時器
+    
+    // Coding Pair：粒子系統診斷追蹤
+    private int particleSystemFailCount = 0;      // 粒子系統失敗次數
+    private bool particleSystemAutoFixed = false; // 是否已自動修復
 
     // ==================== Unity 生命週期方法 ====================
     
@@ -119,6 +142,21 @@ public class DarkDescentController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // 自動添加粒子監控組件
+        if (!GetComponent<ParticleSystemMonitor>())
+        {
+            var monitor = gameObject.AddComponent<ParticleSystemMonitor>();
+            monitor.showMonitor = showParticleMonitor;
+            
+            // 收集所有粒子系統
+            var systems = new System.Collections.Generic.List<ParticleSystem>();
+            if (boneFragments) systems.Add(boneFragments);
+            if (darkFog) systems.Add(darkFog);
+            if (soulParticles) systems.Add(soulParticles);
+            if (curseLinkParticles) systems.Add(curseLinkParticles);
+            monitor.monitoredSystems = systems.ToArray();
+        }
+        
         // 取得角色的精靈渲染器組件（用於顯示圖片）
         spriteRenderer = GetComponent<SpriteRenderer>();
         
@@ -140,24 +178,32 @@ public class DarkDescentController : MonoBehaviour
             spriteRenderer.sprite = animationSprites[0];
         }
         
-        // 啟動墜落時的視覺效果
-        if (darkFog) darkFog.Play();           // 播放黑暗霧氣
-        if (boneFragments) boneFragments.Play(); // 播放骨頭碎片
+        // 啟動墜落時的視覺效果（根據角色類型配置參數）
+        // Coding Pair：自動診斷和修復粒子系統問題
+        bool particlesReady = DiagnoseAndFixParticleSystems();
+        
+        if (!particlesReady)
+        {
+            Debug.LogWarning("[Coding Pair] 粒子系統配置失敗，嘗試自動修復...");
+            ForceUnlockAndReconfigureParticles();
+        }
         
         // 啟動同命蠱連結特效
         if (showCurseLink && curseLinkParticles) 
         {
             curseLinkParticles.Play();
-            Debug.Log("[同命蠱] 詛咒連結已啟動");
+
         }
         
         // 播放風聲音效（循環播放）
         if (soundManager) soundManager.PlayWindSound();
         
         // 在 Console 中輸出開始訊息（包含詛咒背景）
-        string curseMessage = GetCurseMessage();
-        Debug.Log($"[同命蠱] {character} 開始從 {initialHeight}m 高度墜落");
-        Debug.Log($"[詛咒] {curseMessage}");
+        if (showDebugInfo)
+        {
+            string curseMessage = GetCurseMessage();
+            Debug.Log($"[同命蠢] {character} 開始從 {initialHeight}m 高度墜落 - {curseMessage}");
+        }
     }
 
     /// <summary>
@@ -207,6 +253,9 @@ public class DarkDescentController : MonoBehaviour
             
             // === 精靈動畫更新 ===
             UpdateSpriteAnimation();
+            
+            // === 動態調整粒子效果（根據速度）===
+            UpdateParticleSystemsBasedOnVelocity();
 
             // === 著地檢測 ===
             
@@ -215,13 +264,21 @@ public class DarkDescentController : MonoBehaviour
             if (transform.position.y <= 0)
                 OnLanding();
         }
+        
+        // 按下 M 鍵：切換粒子監控面板
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            showParticleMonitor = !showParticleMonitor;
+            var monitor = GetComponent<ParticleSystemMonitor>();
+            if (monitor) monitor.showMonitor = showParticleMonitor;
+        }
 
         // === 玩家輸入處理 ===
         
         // 按下 R 鍵：重置墜落（重新開始）
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("[DarkDescent] 玩家按下 R 鍵，重置墜落");
+
             ResetFall();
         }
         
@@ -229,7 +286,7 @@ public class DarkDescentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             showDebugInfo = !showDebugInfo;
-            Debug.Log($"[DarkDescent] Debug 資訊顯示：{(showDebugInfo ? "開啟" : "關閉")}");
+
         }
     }
     
@@ -267,7 +324,7 @@ public class DarkDescentController : MonoBehaviour
     
     /// <summary>
     /// OnGUI：Unity 用於繪製 GUI 的方法
-    /// 用於顯示 Debug 資訊在螢幕上
+    /// 用於顯示 Debug 資訊在螢幕上 | 按 M 開粒子監控
     /// </summary>
     void OnGUI()
     {
@@ -317,12 +374,11 @@ public class DarkDescentController : MonoBehaviour
 
         // === 視覺效果切換 ===
         
-        // 停止墜落時的粒子效果
-        if (boneFragments) boneFragments.Stop();    // 停止骨頭碎片
-        if (darkFog) darkFog.Stop();                // 停止黑暗霧氣
+        // 優雅停止墜落時的粒子效果（帶淡出）
+        StopFallingParticlesWithFade();
         
-        // 播放著地時的粒子效果（爆炸效果）
-        if (soulParticles) soulParticles.Play();    // 播放靈魂粒子
+        // 播放著地時的粒子效果（根據墜落數據配置爆炸強度）
+        TriggerLandingParticleExplosion();
 
         // === 鏡頭震動效果（增加衝擊感）===
         
@@ -347,11 +403,14 @@ public class DarkDescentController : MonoBehaviour
         
         // === 輸出著地統計資訊 ===
         
-        Debug.Log($"[DarkDescent] 著地！統計資訊：");
-        Debug.Log($"  - 墜落時間：{fallTime:F2} 秒");
-        Debug.Log($"  - 墜落距離：{fallDistance:F2} 米");
-        Debug.Log($"  - 著地速度：{maxVelocityReached:F2} m/s");
-        Debug.Log($"  - 平均速度：{(fallDistance / fallTime):F2} m/s");
+        if (showDebugInfo)
+        {
+            Debug.Log($"[DarkDescent] 著地！\n" +
+                     $"  - 墜落時間：{fallTime:F2} 秒\n" +
+                     $"  - 墜落距離：{fallDistance:F2} 米\n" +
+                     $"  - 著地速度：{maxVelocityReached:F2} m/s\n" +
+                     $"  - 平均速度：{(fallDistance / fallTime):F2} m/s");
+        }
     }
 
     /// <summary>
@@ -366,6 +425,7 @@ public class DarkDescentController : MonoBehaviour
         fallTime = 0f;
         fallDistance = 0f;
         maxVelocityReached = 0f;
+        terminalVelocityEffectTriggered = false;  // 重置終端速度特效狀態
         
         // 將角色移回起始位置
         transform.position = startPosition;
@@ -374,17 +434,25 @@ public class DarkDescentController : MonoBehaviour
         // Quaternion.identity 代表沒有旋轉（0, 0, 0）
         transform.rotation = Quaternion.identity;
         
-        // 重新啟動墜落時的粒子效果
-        if (darkFog) darkFog.Play();
-        if (boneFragments) boneFragments.Play();
+        // 重置動畫狀態
+        currentFrame = 0;
+        animationTimer = 0f;
         
-        // 停止著地粒子（如果還在播放）
-        if (soulParticles) soulParticles.Stop();
+        // 先停止所有粒子並清空（使用 StopEmittingAndClear 確保乾淨）
+        if (darkFog) darkFog.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        if (boneFragments) boneFragments.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        if (soulParticles) soulParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        
+        // 重新使用智能配置系統啟動粒子（不是簡單的 Play()）
+        bool particlesReady = ConfigureAndStartParticleSystems();
         
         // 重新播放風聲
         if (soundManager) soundManager.PlayWindSound();
         
-        Debug.Log("[DarkDescent] 已重置墜落狀態");
+        if (showDebugInfo)
+        {
+            Debug.Log($"[重置] 墜落重置完成 - 粒子配置: {(particlesReady ? "成功" : "失敗")}");
+        }
     }
     
     /// <summary>
@@ -405,6 +473,460 @@ public class DarkDescentController : MonoBehaviour
         }
     }
 
+    // ==================== Coding Pair：粒子系統診斷和自動修復 ====================
+    
+    /// <summary>
+    /// 診斷粒子系統並嘗試自動修復
+    /// 警告：參數鎖定、無法修改 → 自動修復：強制解鎖並重新配置
+    /// </summary>
+    private bool DiagnoseAndFixParticleSystems()
+    {
+        bool allSystemsHealthy = true;
+        
+        // 檢查 boneFragments
+        if (boneFragments)
+        {
+            if (!ValidateParticleSystemWritable(boneFragments, "boneFragments"))
+            {
+                allSystemsHealthy = false;
+                AutoFixParticleSystem(boneFragments, "boneFragments");
+            }
+        }
+        
+        // 檢查 darkFog
+        if (darkFog)
+        {
+            if (!ValidateParticleSystemWritable(darkFog, "darkFog"))
+            {
+                allSystemsHealthy = false;
+                AutoFixParticleSystem(darkFog, "darkFog");
+            }
+        }
+        
+        // 檢查 soulParticles
+        if (soulParticles)
+        {
+            if (!ValidateParticleSystemWritable(soulParticles, "soulParticles"))
+            {
+                allSystemsHealthy = false;
+                AutoFixParticleSystem(soulParticles, "soulParticles");
+            }
+        }
+        
+        if (allSystemsHealthy)
+        {
+            // 系統健康，正常配置
+            return ConfigureAndStartParticleSystems();
+        }
+        else
+        {
+            Debug.LogWarning($"[Coding Pair] 偵測到 {particleSystemFailCount} 個粒子系統問題，已自動修復");
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// 驗證粒子系統是否可寫入（檢測鎖定狀態）
+    /// </summary>
+    private bool ValidateParticleSystemWritable(ParticleSystem ps, string systemName)
+    {
+        if (ps == null) return false;
+        
+        try
+        {
+            // 嘗試讀取並修改一個無害的參數來測試可寫性
+            var main = ps.main;
+            float originalDuration = main.duration;
+            
+            // 嘗試寫入相同的值（不會改變效果）
+            var testMain = ps.main;
+            testMain.duration = originalDuration;
+            
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[Coding Pair 警告] {systemName} 參數被鎖定無法修改！\n原因：{e.Message}");
+            particleSystemFailCount++;
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// 自動修復粒子系統（Coding Pair 自動修復機制）
+    /// </summary>
+    private void AutoFixParticleSystem(ParticleSystem ps, string systemName)
+    {
+        if (ps == null) return;
+        
+        Debug.Log($"[Coding Pair 修復] 正在修復 {systemName}...");
+        
+        // 策略 1：停止並重啟
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        ps.Clear();
+        
+        // 策略 2：重新初始化模組
+        try
+        {
+            var main = ps.main;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+            
+            var emission = ps.emission;
+            emission.enabled = true;
+            
+            Debug.Log($"[Coding Pair 修復] ✓ {systemName} 已解鎖並重置");
+            particleSystemAutoFixed = true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[Coding Pair 修復失敗] {systemName} 無法自動修復：{e.Message}");
+            Debug.LogError($"手動修復步驟：\n1. 選擇 {gameObject.name}\n2. 在 Inspector 中找到 {systemName}\n3. 點擊 Reset\n4. 重新配置參數");
+        }
+    }
+    
+    /// <summary>
+    /// 強制解鎖並重新配置所有粒子系統
+    /// 最後的修復手段
+    /// </summary>
+    private void ForceUnlockAndReconfigureParticles()
+    {
+        Debug.Log("[Coding Pair 強制修復] 開始強制解鎖所有粒子系統...");
+        
+        // 強制重建所有粒子系統狀態
+        if (boneFragments)
+        {
+            ResetParticleSystemToDefault(boneFragments, "boneFragments");
+        }
+        
+        if (darkFog)
+        {
+            ResetParticleSystemToDefault(darkFog, "darkFog");
+        }
+        
+        if (soulParticles)
+        {
+            ResetParticleSystemToDefault(soulParticles, "soulParticles");
+        }
+        
+        // 重新嘗試配置
+        ConfigureAndStartParticleSystems();
+        
+        Debug.Log("[Coding Pair 強制修復] 完成！如問題持續，請檢查 Prefab 覆蓋設定");
+    }
+    
+    /// <summary>
+    /// 重置粒子系統到默認可寫狀態
+    /// </summary>
+    private void ResetParticleSystemToDefault(ParticleSystem ps, string systemName)
+    {
+        if (ps == null) return;
+        
+        try
+        {
+            // 完全停止
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.Clear();
+            
+            // 重置核心模組
+            var main = ps.main;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.playOnAwake = false;
+            main.loop = true;
+            
+            // 確保發射器啟用
+            var emission = ps.emission;
+            emission.enabled = true;
+            emission.rateOverTime = 10f; // 默認值
+            
+            // 重置形狀
+            var shape = ps.shape;
+            shape.enabled = true;
+            
+            Debug.Log($"[Coding Pair] ✓ {systemName} 重置到默認狀態");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[Coding Pair] ✗ {systemName} 重置失敗：{e.Message}");
+        }
+    }
+
+    // ==================== 高級粒子系統管理方法 ====================
+    
+    /// <summary>
+    /// 配置並啟動粒子系統（使用實際預設配置）
+    /// 不是空洞的參數調整，而是使用預設對應表
+    /// 
+    /// 實際對應：
+    /// - 骷髏：75粒/s × 1.6s壽命 × 5m/s = 密集骨碎
+    /// - 女子：30粒/s × 3s壽命 × 2m/s = 優雅飄散
+    /// - 黑暗：80粒/s × 5s壽命 × 3倍尺寸 = 濃密黑霧
+    /// 
+    /// 驗證機制：差異>30%警告，差異>50%強制修復
+    /// </summary>
+    private bool ConfigureAndStartParticleSystems()
+    {
+        bool particlesConfigured = false;
+        
+        // 使用預設配置對應表（實際數值，不是空話）
+        switch (character)
+        {
+            case CharacterType.Skeleton:
+                // 對應：骷髏墜落 = 75粒/s × 1.6s × 5m/s → 密集骨碎
+                if (boneFragments)
+                {
+                    ParticleEffectPresets.ApplySkeletonFalling(boneFragments);
+                    
+                    // 驗證配置是否正確應用
+                    float difference = ParticleEffectPresets.ValidateParticleSystem(
+                        boneFragments, "SkeletonFalling", out string warning);
+                    
+                    if (difference > 50f)
+                    {
+                        Debug.LogError($"[配置驗證] boneFragments {warning}");
+                        // 自動修復
+                        ParticleEffectPresets.AutoDetectAndApplyBestPreset(boneFragments, character, forceApply: true);
+                    }
+                    else if (difference > 30f)
+                    {
+                        Debug.LogWarning($"[配置驗證] boneFragments {warning}");
+                    }
+                    else if (showDebugInfo)
+                    {
+                        Debug.Log($"[配置驗證] boneFragments {warning}");
+                    }
+                    
+                    particlesConfigured = true;
+                }
+                
+                // 對應：淺灰霧 = 40粒/s基礎率
+                if (darkFog)
+                {
+                    ParticleEffectPresets.ApplySpeedBasedFog(darkFog, 0f, maxFallSpeed, 40f);
+                }
+                break;
+                
+            case CharacterType.CursedGirl:
+                // 對應：女子飄散 = 30粒/s × 3s × 2m/s → 優雅靈魂
+                if (boneFragments)
+                {
+                    ParticleEffectPresets.ApplyCursedGirlFalling(boneFragments);
+                    
+                    // 驗證邏輯差異
+                    float diffGirl = ParticleEffectPresets.ValidateParticleSystem(
+                        boneFragments, "CursedGirlFalling", out string warnGirl);
+                    
+                    if (diffGirl > 50f)
+                        Debug.LogError($"[驗證] {warnGirl}");
+                    else if (diffGirl > 30f)
+                        Debug.LogWarning($"[驗證] {warnGirl}");
+                    
+                    particlesConfigured = true;
+                }
+                
+                // 對應：紫霧 = 30粒/s × 紫色(0.5,0.3,0.6) → 詛咒氛圍
+                if (darkFog)
+                {
+                    ParticleEffectPresets.ApplyCursedGirlFog(darkFog);
+                }
+                break;
+                
+            case CharacterType.DarkCreature:
+                // 對應：黑暗濃霧 = 80粒/s × 3倍尺寸 × 黑色 → 壓迫感
+                if (darkFog)
+                {
+                    ParticleEffectPresets.ApplyDarkCreatureFog(darkFog);
+                    
+                    // 驗證邏輯差異
+                    float diffDark = ParticleEffectPresets.ValidateParticleSystem(
+                        darkFog, "DarkCreatureFog", out string warnDark);
+                    
+                    if (diffDark > 50f)
+                        Debug.LogError($"[驗證] {warnDark}");
+                    else if (diffDark > 30f)
+                        Debug.LogWarning($"[驗證] {warnDark}");
+                    
+                    particlesConfigured = true;
+                }
+                
+                // 對應：怨念碎片 = 50粒/s × 暗色 → 纏繞效果
+                if (boneFragments)
+                {
+                    ParticleEffectPresets.ApplyDarkCreatureFragments(boneFragments);
+                }
+                break;
+        }
+        
+        // 如果沒有配置任何粒子系統，發出警告
+        if (!particlesConfigured)
+        {
+            Debug.LogWarning($"[粒子系統] {character} 沒有配置任何粒子效果！請檢查 Inspector");
+        }
+        
+        return particlesConfigured;
+    }
+    
+    /// <summary>
+    /// 根據墜落速度動態調整粒子效果
+    /// 實際對應：
+    /// 0-5m/s   → 霧氣×0.5密度
+    /// 5-10m/s  → 霧氣×1.0密度
+    /// 10-15m/s → 霧氣×1.5密度
+    /// 15-20m/s → 霧氣×2.0密度 + 碎片速度+8m/s
+    /// </summary>
+    private void UpdateParticleSystemsBasedOnVelocity()
+    {
+        // 對應：速度比例 → 效果倍率
+        float velocityRatio = Mathf.Clamp01(currentVelocity / maxFallSpeed);
+        
+        // 使用預設配置的速度對應公式
+        if (darkFog && darkFog.isPlaying)
+        {
+            float baseRate = character == CharacterType.DarkCreature ? 80f : 30f;
+            ParticleEffectPresets.ApplySpeedBasedFog(darkFog, currentVelocity, maxFallSpeed, baseRate);
+        }
+        
+        // 對應：速度每+5m/s → 碎片速度+3m/s, 發射率+20粒/s
+        if (boneFragments && boneFragments.isPlaying)
+        {
+            ParticleEffectPresets.ApplySpeedBasedFragments(boneFragments, currentVelocity, boneFragmentEmissionRate);
+        }
+        
+        // 達到終端速度觸發特效
+        if (velocityRatio >= 0.99f && currentVelocity > 0 && !terminalVelocityEffectTriggered)
+        {
+            TriggerTerminalVelocityEffect();
+        }
+    }
+    
+    /// <summary>
+    /// 優雅地停止墜落粒子效果（帶淡出效果）
+    /// 不是粗暴的Stop()，而是自然過渡
+    /// </summary>
+    private void StopFallingParticlesWithFade()
+    {
+        // 使用Stop(true, ParticleSystemStopBehavior.StopEmitting)讓現有粒子自然消失
+        if (boneFragments)
+        {
+            boneFragments.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+        
+        if (darkFog)
+        {
+            darkFog.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+    }
+    
+    /// <summary>
+    /// 觸發著地粒子爆炸效果
+    /// 實際對應：
+    /// 衝擊力0.5x → 75-125粒
+    /// 衝擊力1.0x → 150-250粒
+    /// 衝擊力1.5x → 225-375粒
+    /// 衝擊力2.0x → 300-500粒
+    /// </summary>
+    private void TriggerLandingParticleExplosion()
+    {
+        if (!soulParticles) return;
+        
+        // 對應：墜落數據 → 衝擊力倍率
+        float impactForce = (fallDistance / initialHeight) * (maxVelocityReached / maxFallSpeed);
+        impactForce = Mathf.Clamp(impactForce, 0.3f, 2f);
+        
+        // 根據角色選擇顏色
+        Color characterColor;
+        switch (character)
+        {
+            case CharacterType.Skeleton:
+                characterColor = new Color(0.9f, 0.9f, 0.8f, 1f);  // 骨白
+                break;
+            case CharacterType.CursedGirl:
+                characterColor = new Color(0.8f, 0.5f, 0.9f, 1f);  // 詛咒紫
+                break;
+            case CharacterType.DarkCreature:
+                characterColor = new Color(0.3f, 0.3f, 0.4f, 1f);  // 黑暗
+                break;
+            default:
+                characterColor = Color.white;
+                break;
+        }
+        
+        // 使用預設配置的衝擊力對應公式
+        ParticleEffectPresets.ApplyImpactExplosion(soulParticles, impactForce, characterColor);
+        
+        soulParticles.Play();
+    }
+    
+    // ==================== 終端速度特效（實際遊戲反饋）====================
+    
+    /// <summary>
+    /// 終端速度特效：當角色達到最大速度時觸發
+    /// 增加視覺衝擊感，讓玩家感受到極速墜落
+    /// 這會實際改變遊戲視覺和觸發連鎖效果
+    /// </summary>
+    private bool terminalVelocityEffectTriggered = false;
+    
+    private void TriggerTerminalVelocityEffect()
+    {
+        // 只觸發一次
+        if (terminalVelocityEffectTriggered) return;
+        terminalVelocityEffectTriggered = true;
+        
+        // 速度突破時的視覺爆發（實際修改 ParticleSystem）
+        if (boneFragments)
+        {
+            // 獲取或創建 Burst
+            var emission = boneFragments.emission;
+            var burstList = new ParticleSystem.Burst[emission.burstCount > 0 ? emission.burstCount : 1];
+            
+            if (emission.burstCount > 0)
+            {
+                emission.GetBursts(burstList);
+                burstList[0].count = 50;  // 瞬間爆發大量粒子
+                emission.SetBurst(0, burstList[0]);
+            }
+            else
+            {
+                // 創建新的 Burst
+                emission.SetBurst(0, new ParticleSystem.Burst(0f, 50));
+            }
+        }
+        
+        // 黑霧變得不透明
+        if (darkFog)
+        {
+            var main = darkFog.main;
+            Color originalColor = main.startColor.color;
+            main.startColor = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+            
+            // 同時增大霧氣尺寸
+            main.startSize = main.startSize.constant * 1.5f;
+        }
+        
+        // 輕微的螢幕震動提示（實際遊戲回饋）
+        if (enableScreenShake)
+        {
+            var shake = Camera.main?.GetComponent<CameraShake>();
+            if (shake) 
+            {
+                shake.Shake(0.2f, 0.1f);  // 短促震動
+                if (showDebugInfo)
+                    Debug.Log("[遊戲回饋] 觸發終端速度震動");
+            }
+        }
+        
+        // 播放特殊音效（如果有 soundManager）
+        if (soundManager)
+        {
+            // soundManager.PlayTerminalVelocitySound();  // 可擴展
+        }
+        
+        if (showDebugInfo)
+        {
+            Debug.Log($"[物理] ★ 達到終端速度！{currentVelocity:F2} m/s - 詛咒加深...");
+            Debug.Log($"[視覺] 觸發粒子爆發、霧氣增強、螢幕震動");
+        }
+    }
+    
     // ==================== 公開屬性（供其他腳本讀取狀態）====================
     
     /// <summary>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ComprehensiveFixer : Editor
 {
-    [MenuItem("DarkDescentDemo/快速修復/一鍵修復所有問題")]
+    [MenuItem("Dark Descent/快速修復/一鍵修復所有問題")]
     public static void FixAllIssues()
     {
         Debug.Log("========== 開始綜合修復 ==========\n");

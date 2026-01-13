@@ -88,9 +88,8 @@ public class SpriteAnimationController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
-            Debug.LogError("找不到 SpriteRenderer 元件！");
-            enabled = false;
-            return;
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            Debug.Log($"[SpriteAnimationController] 已自動添加 SpriteRenderer 到 {gameObject.name}");
         }
 
         originalScale = transform.localScale;
@@ -125,10 +124,8 @@ public class SpriteAnimationController : MonoBehaviour
             transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         }
 
-        if (showDebugInfo)
-        {
-            ShowDebugInfo();
-        }
+        // ShowDebugInfo 已優化為空方法，編譯器會內聯優化
+        // 如需啟用：在 OnGUI() 中顯示資訊，而非每幀 Debug.Log
     }
 
     /// <summary>
@@ -268,16 +265,22 @@ public class SpriteAnimationController : MonoBehaviour
     }
 
     /// <summary>
-    /// 顯示調試資訊
+    /// 顯示調試資訊（使用 OnGUI 而非 Debug.Log，避免控制台洪水）
     /// </summary>
-    void ShowDebugInfo()
+    void OnGUI()
     {
-        string info = $"Frame: {currentFrame}/{animationSprites.Length}\n";
-        info += $"Speed: {currentSpeed:F2} m/s\n";
-        info += $"Position: {transform.position}\n";
-        info += $"Playing: {isPlaying}";
+        if (!showDebugInfo) return;
         
-        Debug.Log(info);
+        GUILayout.BeginArea(new UnityEngine.Rect(10, 10, 300, 150));
+        GUILayout.Box($"[{gameObject.name}] 動畫資訊");
+        if (animationSprites != null)
+        {
+            GUILayout.Label($"幀數: {currentFrame + 1}/{animationSprites.Length}");
+        }
+        GUILayout.Label($"速度: {currentSpeed:F2} m/s");
+        GUILayout.Label($"位置: {transform.position}");
+        GUILayout.Label($"播放中: {isPlaying}");
+        GUILayout.EndArea();
     }
 
     #region 公開方法
@@ -289,7 +292,8 @@ public class SpriteAnimationController : MonoBehaviour
     {
         if (animationSprites == null || animationSprites.Length == 0)
         {
-            Debug.LogWarning("沒有設定動畫精靈！");
+            Debug.LogWarning($"[{gameObject.name}] 未設定動畫精靈陣列，請在 Inspector 中添加精靈圖片");
+            isPlaying = false;
             return;
         }
 

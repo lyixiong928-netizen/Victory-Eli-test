@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ColorHarmonySetup : Editor
 {
-    [MenuItem("DarkDescentDemo/顏色協調/啟用顏色協調系統")]
+    [MenuItem("Dark Descent/顏色協調/啟用顏色協調系統")]
     public static void EnableColorHarmony()
     {
         // 檢查是否已有管理器

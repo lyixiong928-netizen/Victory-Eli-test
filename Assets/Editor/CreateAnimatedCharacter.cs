@@ -4,11 +4,11 @@ using System.Linq;
 
 public class CreateAnimatedCharacter : Editor
 {
-    [MenuItem("DarkDescentDemo/自動化創建/完整動畫角色")]
+    [MenuItem("Dark Descent/建立物件/完整動畫角色")]
     public static void CreateFullAnimatedCharacter()
     {
-        // 1. 創建主物件
-        GameObject animatedCharacter = new GameObject("AnimatedCharacter");
+        // 1. 創建主物件（使用標準命名）
+        GameObject animatedCharacter = new GameObject("Create_AnimatedCharacter");
         animatedCharacter.transform.position = Vector3.zero;
         
         // 2. 添加 SpriteRenderer
@@ -68,16 +68,9 @@ public class CreateAnimatedCharacter : Editor
             Debug.Log($"✅ 已自動添加 {sprites.Length} 個精靈幀");
         }
     }
-
-    // 快捷鍵：Ctrl+Shift+A
-    [MenuItem("DarkDescentDemo/自動化創建/完整動畫角色 %#a")]
-    public static void CreateFullAnimatedCharacterShortcut()
-    {
-        CreateFullAnimatedCharacter();
-    }
     
     // 只創建空物件（保留原功能）
-    [MenuItem("DarkDescentDemo/自動化創建/僅空物件")]
+    [MenuItem("Dark Descent/建立物件/空的動畫物件")]
     public static void CreateEmptyOnly()
     {
         GameObject animatedCharacter = new GameObject("AnimatedCharacter");
@@ -88,7 +81,7 @@ public class CreateAnimatedCharacter : Editor
     }
     
     // 添加到現有物件
-    [MenuItem("DarkDescentDemo/自動化創建/為選中物件添加動畫組件")]
+    [MenuItem("Dark Descent/建立物件/為選中物件添加動畫")]
     public static void AddAnimationToSelected()
     {
         GameObject selected = Selection.activeGameObject;

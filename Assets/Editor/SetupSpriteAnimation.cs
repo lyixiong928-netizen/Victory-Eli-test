@@ -24,8 +24,13 @@ public class SetupSpriteAnimation : Editor
         
         if (demoObject == null)
         {
-            Debug.LogError("找不到目標物件！請確認場景中有 '同命股動畫' 或 '同命蠱動畫' 或 'DarkDescentDemo' 物件。");
-            EditorUtility.DisplayDialog("錯誤", "找不到目標物件！", "確定");
+            Debug.LogWarning("⚠️ 找不到目標物件！場景中需要有動畫物件。");
+            EditorUtility.DisplayDialog("找不到物件", 
+                "請確認場景中有以下任一物件：\n" +
+                "- 同命蠱動畫\n" +
+                "- DarkDescentDemo\n\n" +
+                "或點擊 Dark Descent → CreateCreate_完整場景 創建新場景", 
+                "我知道了");
             return;
         }
         

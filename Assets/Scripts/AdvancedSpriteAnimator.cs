@@ -55,9 +55,8 @@ public class AdvancedSpriteAnimator : MonoBehaviour
         
         if (spriteRenderer == null)
         {
-            Debug.LogError($"[AdvancedSpriteAnimator] 找不到 SpriteRenderer 元件！物件: {gameObject.name}");
-            enabled = false;
-            return;
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            Debug.Log($"[AdvancedSpriteAnimator] 已自動添加 SpriteRenderer 到 {gameObject.name}");
         }
 
         fadeColor = spriteRenderer.color;

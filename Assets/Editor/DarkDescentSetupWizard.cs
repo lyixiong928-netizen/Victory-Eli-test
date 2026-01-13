@@ -142,18 +142,18 @@ public class DarkDescentSetupWizard : EditorWindow
         particlesParent.transform.parent = fallingCharacter.transform;
         particlesParent.transform.localPosition = Vector3.zero;
         
-        // 建立 4 種粒子系統
-        CreateParticleSystem(particlesParent.transform, "BoneFragments", new Color(0.9f, 0.9f, 0.8f), 50);
-        CreateParticleSystem(particlesParent.transform, "DarkFog", new Color(0.1f, 0.1f, 0.2f, 0.5f), 100);
-        CreateParticleSystem(particlesParent.transform, "SoulGlow", new Color(0.5f, 0.8f, 1f), 30);
-        CreateParticleSystem(particlesParent.transform, "DarkCreatures", new Color(0.2f, 0.1f, 0.3f), 20);
+        // 建立 4 種粒子系統並直接儲存引用
+        ParticleSystem boneFragments = CreateParticleSystem(particlesParent.transform, "BoneFragments", new Color(0.9f, 0.9f, 0.8f), 50);
+        ParticleSystem darkFog = CreateParticleSystem(particlesParent.transform, "DarkFog", new Color(0.1f, 0.1f, 0.2f, 0.5f), 100);
+        ParticleSystem soulGlow = CreateParticleSystem(particlesParent.transform, "SoulGlow", new Color(0.5f, 0.8f, 1f), 30);
+        ParticleSystem darkCreatures = CreateParticleSystem(particlesParent.transform, "DarkCreatures", new Color(0.2f, 0.1f, 0.3f), 20);
         
-        // 加入粒子管理器
+        // 加入粒子管理器並直接指派引用（避免使用 GameObject.Find）
         ParticleEffectManager particleManager = fallingCharacter.AddComponent<ParticleEffectManager>();
-        particleManager.boneFragments = GameObject.Find("BoneFragments").GetComponent<ParticleSystem>();
-        particleManager.darkFog = GameObject.Find("DarkFog").GetComponent<ParticleSystem>();
-        particleManager.soulGlow = GameObject.Find("SoulGlow").GetComponent<ParticleSystem>();
-        particleManager.darkCreatures = GameObject.Find("DarkCreatures").GetComponent<ParticleSystem>();
+        particleManager.boneFragments = boneFragments;
+        particleManager.darkFog = darkFog;
+        particleManager.soulGlow = soulGlow;
+        particleManager.darkCreatures = darkCreatures;
         
         // 5. 建立音效管理器
         statusMessage = "建立音效管理器...";
@@ -191,7 +191,7 @@ public class DarkDescentSetupWizard : EditorWindow
         Selection.activeGameObject = fallingCharacter;
     }
     
-    private void CreateParticleSystem(Transform parent, string name, Color color, int maxParticles)
+    private ParticleSystem CreateParticleSystem(Transform parent, string name, Color color, int maxParticles)
     {
         GameObject psObj = new GameObject(name);
         psObj.transform.parent = parent;
@@ -215,6 +215,8 @@ public class DarkDescentSetupWizard : EditorWindow
         // 渲染設定
         var renderer = ps.GetComponent<ParticleSystemRenderer>();
         renderer.sortingOrder = 5;
+        
+        return ps;
     }
     
     private void CreateFolderStructure()
