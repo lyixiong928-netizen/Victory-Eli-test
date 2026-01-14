@@ -87,7 +87,24 @@ public class CharacterAnimator : MonoBehaviour
     /// </summary>
     void CreateGhostSprite()
     {
-        if (spriteRenderer == null || spriteRenderer.sprite == null || ghostParent == null) return;
+        // 安全檢查：確保所有必要組件都存在
+        if (spriteRenderer == null)
+        {
+            Debug.LogWarning("[CharacterAnimator] SpriteRenderer is null!");
+            return;
+        }
+        
+        if (spriteRenderer.sprite == null)
+        {
+            Debug.LogWarning("[CharacterAnimator] SpriteRenderer.sprite is null! Ghost trail需要先指定精靈圖片");
+            return;
+        }
+        
+        if (ghostParent == null)
+        {
+            Debug.LogWarning("[CharacterAnimator] GhostParent is null!");
+            return;
+        }
         
         GameObject ghost = new GameObject("Ghost");
         ghost.transform.SetParent(ghostParent.transform);
@@ -104,6 +121,8 @@ public class CharacterAnimator : MonoBehaviour
         // 添加淡出組件
         GhostFade fade = ghost.AddComponent<GhostFade>();
         fade.lifetime = ghostLifetime;
+        
+        Debug.Log($"[CharacterAnimator] Created ghost at {transform.position}");
     }
     
     /// <summary>
