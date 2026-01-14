@@ -19,7 +19,7 @@ public class SceneValidator : EditorWindow
     
     private string validationReport = "";
 
-    [MenuItem("Dark Descent/🔍 驗證場景配置")]
+    [MenuItem("Dark Descent/🔍 場景驗證/完整驗證")]
     public static void ShowWindow()
     {
         var window = GetWindow<SceneValidator>("Scene Validator");
