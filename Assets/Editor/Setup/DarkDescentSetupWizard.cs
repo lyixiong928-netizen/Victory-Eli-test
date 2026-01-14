@@ -91,7 +91,13 @@ public class DarkDescentSetupWizard : EditorWindow
     {
         statusMessage = "開始建立場景...";
         
-        // 建立新場景
+        // 先保存當前場景（如果有修改）
+        if (EditorSceneManager.GetActiveScene().isDirty)
+        {
+            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        }
+        
+        // 建立新場景（不替換當前場景）
         var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
         
         // 1. 設定主攝影機
@@ -142,11 +148,11 @@ public class DarkDescentSetupWizard : EditorWindow
         particlesParent.transform.parent = fallingCharacter.transform;
         particlesParent.transform.localPosition = Vector3.zero;
         
-        // 建立 4 種粒子系統並直接儲存引用
-        ParticleSystem boneFragments = CreateParticleSystem(particlesParent.transform, "BoneFragments", new Color(0.9f, 0.9f, 0.8f), 50);
-        ParticleSystem darkFog = CreateParticleSystem(particlesParent.transform, "DarkFog", new Color(0.1f, 0.1f, 0.2f, 0.5f), 100);
-        ParticleSystem soulGlow = CreateParticleSystem(particlesParent.transform, "SoulGlow", new Color(0.5f, 0.8f, 1f), 30);
-        ParticleSystem darkCreatures = CreateParticleSystem(particlesParent.transform, "DarkCreatures", new Color(0.2f, 0.1f, 0.3f), 20);
+        // 建立 4 種粒子系統並直接儲存引用（降低粒子數量避免GPU超時）
+        ParticleSystem boneFragments = CreateParticleSystem(particlesParent.transform, "BoneFragments", new Color(0.9f, 0.9f, 0.8f), 20);
+        ParticleSystem darkFog = CreateParticleSystem(particlesParent.transform, "DarkFog", new Color(0.1f, 0.1f, 0.2f, 0.5f), 30);
+        ParticleSystem soulGlow = CreateParticleSystem(particlesParent.transform, "SoulGlow", new Color(0.5f, 0.8f, 1f), 15);
+        ParticleSystem darkCreatures = CreateParticleSystem(particlesParent.transform, "DarkCreatures", new Color(0.2f, 0.1f, 0.3f), 10);
         
         // 加入粒子管理器並直接指派引用（避免使用 GameObject.Find）
         ParticleEffectManager particleManager = fallingCharacter.AddComponent<ParticleEffectManager>();

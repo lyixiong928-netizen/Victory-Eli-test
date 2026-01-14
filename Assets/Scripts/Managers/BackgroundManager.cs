@@ -17,6 +17,13 @@ public class BackgroundManager : MonoBehaviour
     [Tooltip("是否自動適應螢幕大小")]
     public bool fitToScreen = true;
     
+    [Header("對比度設定")]
+    [Tooltip("使用反轉對比模式（讓深色物件在深色背景上可見）")]
+    public bool useInverseContrast = false;
+    
+    [Tooltip("背景顏色（當使用反轉對比時）")]
+    public Color backgroundColor = Color.black;
+    
     private SpriteRenderer spriteRenderer;
     
     void Start()
@@ -41,8 +48,8 @@ public class BackgroundManager : MonoBehaviour
         {
             spriteRenderer.sprite = backgroundSprite;
             
-            // 設定透明度
-            Color color = spriteRenderer.color;
+            // 設定透明度和顏色
+            Color color = useInverseContrast ? backgroundColor : Color.white;
             color.a = backgroundAlpha;
             spriteRenderer.color = color;
             

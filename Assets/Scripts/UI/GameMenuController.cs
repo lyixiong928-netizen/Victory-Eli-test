@@ -45,10 +45,19 @@ public class GameMenuController : MonoBehaviour
         {
             panelManager = FindObjectOfType<UIPanelManager>();
         }
+        
+        // 自動查找面板（如果手動設定為空）
+        AutoFindPanels();
+        
+        // 自動查找按鈕（如果手動設定為空）
+        AutoFindButtons();
     }
 
     void Start()
     {
+        // 驗證所有引用
+        ValidateReferences();
+        
         // 設置按鈕監聽器
         SetupButtonListeners();
         
@@ -61,6 +70,10 @@ public class GameMenuController : MonoBehaviour
             mainMenuPanel.Show();
             if (settingsPanel != null) settingsPanel.Hide(false);
             if (aboutPanel != null) aboutPanel.Hide(false);
+        }
+        else if (showMainMenuOnStart && mainMenuPanel == null)
+        {
+            Debug.LogError("❌ 主選單面板未設定！無法顯示選單");
         }
     }
 
@@ -239,19 +252,192 @@ public class GameMenuController : MonoBehaviour
     void HandleEscapeKey()
     {
         // 如果設定面板開啟，返回主選單
-        if (settingsPanel != null && settingsPanel.IsVisible())
+        if (settingsPanel != null && settingsPanel.IsVisible)
         {
             OnBackToMainMenu();
         }
         // 如果關於面板開啟，返回主選單
-        else if (aboutPanel != null && aboutPanel.IsVisible())
+        else if (aboutPanel != null && aboutPanel.IsVisible)
         {
             OnBackToMainMenu();
         }
         // 在主選單按 ESC，離開遊戲
-        else if (mainMenuPanel != null && mainMenuPanel.IsVisible())
+        else if (mainMenuPanel != null && mainMenuPanel.IsVisible)
         {
             OnQuitGame();
+        }
+    }
+    
+    // ==================== 自動查找功能 ====================
+    
+    /// <summary>
+    /// 自動查找場景中的面板（如果手動設定為空）
+    /// </summary>
+    void AutoFindPanels()
+    {
+        // 查找主選單面板
+        if (mainMenuPanel == null)
+        {
+            mainMenuPanel = FindPanelByName("主選單", "MainMenu", "主菜單");
+            if (mainMenuPanel != null)
+            {
+                Debug.Log($"✅ 自動找到主選單面板: {mainMenuPanel.panelName}");
+            }
+        }
+        
+        // 查找設定面板
+        if (settingsPanel == null)
+        {
+            settingsPanel = FindPanelByName("設定", "Settings", "設置");
+            if (settingsPanel != null)
+            {
+                Debug.Log($"✅ 自動找到設定面板: {settingsPanel.panelName}");
+            }
+        }
+        
+        // 查找關於面板
+        if (aboutPanel == null)
+        {
+            aboutPanel = FindPanelByName("關於", "About", "說明");
+            if (aboutPanel != null)
+            {
+                Debug.Log($"✅ 自動找到關於面板: {aboutPanel.panelName}");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 根據可能的名稱查找面板
+    /// </summary>
+    UIPanel FindPanelByName(params string[] possibleNames)
+    {
+        UIPanel[] allPanels = FindObjectsOfType<UIPanel>();
+        foreach (var panel in allPanels)
+        {
+            foreach (var name in possibleNames)
+            {
+                if (panel.panelName.Contains(name))
+                {
+                    return panel;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /// <summary>
+    /// 自動查找按鈕（如果手動設定為空）
+    /// </summary>
+    void AutoFindButtons()
+    {
+        // 在子物件中查找按鈕
+        Button[] allButtons = GetComponentsInChildren<Button>(true);
+        
+        foreach (var button in allButtons)
+        {
+            string buttonName = button.name.ToLower();
+            
+            // 開始遊戲按鈕
+            if (startGameButton == null && (buttonName.Contains("start") || buttonName.Contains("開始") || buttonName.Contains("play")))
+            {
+                startGameButton = button;
+                Debug.Log($"✅ 自動找到開始按鈕: {button.name}");
+            }
+            
+            // 設定按鈕
+            if (settingsButton == null && (buttonName.Contains("setting") || buttonName.Contains("設定") || buttonName.Contains("設置")))
+            {
+                settingsButton = button;
+                Debug.Log($"✅ 自動找到設定按鈕: {button.name}");
+            }
+            
+            // 離開按鈕
+            if (quitButton == null && (buttonName.Contains("quit") || buttonName.Contains("exit") || buttonName.Contains("離開") || buttonName.Contains("退出")))
+            {
+                quitButton = button;
+                Debug.Log($"✅ 自動找到離開按鈕: {button.name}");
+            }
+            
+            // 返回按鈕
+            if (backButton == null && (buttonName.Contains("back") || buttonName.Contains("返回") || buttonName.Contains("回到")))
+            {
+                backButton = button;
+                Debug.Log($"✅ 自動找到返回按鈕: {button.name}");
+            }
+        }
+        
+        // 查找滑桿和開關
+        if (volumeSlider == null)
+        {
+            Slider[] sliders = GetComponentsInChildren<Slider>(true);
+            foreach (var slider in sliders)
+            {
+                if (slider.name.ToLower().Contains("volume") || slider.name.Contains("音量"))
+                {
+                    volumeSlider = slider;
+                    Debug.Log($"✅ 自動找到音量滑桿: {slider.name}");
+                    break;
+                }
+            }
+        }
+        
+        if (fullscreenToggle == null)
+        {
+            Toggle[] toggles = GetComponentsInChildren<Toggle>(true);
+            foreach (var toggle in toggles)
+            {
+                if (toggle.name.ToLower().Contains("fullscreen") || toggle.name.Contains("全螢幕") || toggle.name.Contains("全屏"))
+                {
+                    fullscreenToggle = toggle;
+                    Debug.Log($"✅ 自動找到全螢幕開關: {toggle.name}");
+                    break;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 驗證所有必要的引用是否正確設定
+    /// </summary>
+    void ValidateReferences()
+    {
+        bool hasErrors = false;
+        
+        // 驗證面板
+        if (mainMenuPanel == null)
+        {
+            Debug.LogError("❌ 主選單面板 (mainMenuPanel) 未設定！");
+            hasErrors = true;
+        }
+        
+        if (settingsPanel == null)
+        {
+            Debug.LogWarning("⚠️ 設定面板 (settingsPanel) 未設定");
+        }
+        
+        // 驗證按鈕
+        if (startGameButton == null)
+        {
+            Debug.LogWarning("⚠️ 開始遊戲按鈕 (startGameButton) 未設定");
+        }
+        
+        if (settingsButton == null)
+        {
+            Debug.LogWarning("⚠️ 設定按鈕 (settingsButton) 未設定");
+        }
+        
+        if (quitButton == null)
+        {
+            Debug.LogWarning("⚠️ 離開按鈕 (quitButton) 未設定");
+        }
+        
+        if (!hasErrors)
+        {
+            Debug.Log("✅ GameMenuController 所有必要引用驗證通過");
+        }
+        else
+        {
+            Debug.LogError("❌ GameMenuController 缺少必要引用，選單可能無法正常運作！");
         }
     }
 }

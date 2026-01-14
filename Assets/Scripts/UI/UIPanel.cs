@@ -37,8 +37,8 @@ public class UIPanel : MonoBehaviour
     public event Action<UIPanel> OnPanelHidden;
     public event Action<UIPanel> OnPanelToggled;
     
-    // 靜態管理
-    private static System.Collections.Generic.List<UIPanel> allActivePanels = new System.Collections.Generic.List<UIPanel>();
+    // Manager 引用（自動註冊）
+    private UIPanelManager manager;
 
 #if UNITY_EDITOR
     // 在編輯器中修改數值時自動更新
@@ -61,10 +61,20 @@ public class UIPanel : MonoBehaviour
         // 快取標題文字引用
         CacheTitleText();
         
-        // 註冊到全局面板列表
-        if (!allActivePanels.Contains(this))
+        // 自動註冊到 Manager（如果存在）
+        RegisterToManager();
+    }
+    
+    /// <summary>
+    /// 自動註冊到場景中的 UIPanelManager
+    /// </summary>
+    private void RegisterToManager()
+    {
+        manager = FindObjectOfType<UIPanelManager>();
+        if (manager != null)
         {
-            allActivePanels.Add(this);
+            manager.RegisterPanel(this);
+            Debug.Log($"📋 面板 {panelName} 已註冊到 Manager");
         }
     }
 
@@ -97,10 +107,11 @@ public class UIPanel : MonoBehaviour
     
     void OnDestroy()
     {
-        // 從全局列表移除
-        if (allActivePanels.Contains(this))
+        // 從 Manager 註銷
+        if (manager != null)
         {
-            allActivePanels.Remove(this);
+            manager.UnregisterPanel(this);
+            Debug.Log($"🗑️ 面板 {panelName} 已從 Manager 註銷");
         }
     }
 
@@ -209,9 +220,11 @@ public class UIPanel : MonoBehaviour
     /// </summary>
     private void HideOtherPanelsInSameParent()
     {
-        if (transform.parent == null) return;
+        if (transform.parent == null || manager == null) return;
         
-        foreach (UIPanel panel in allActivePanels)
+        // 透過 Manager 獲取其他面板
+        UIPanel[] otherPanels = manager.GetAllPanels();
+        foreach (UIPanel panel in otherPanels)
         {
             if (panel != null && panel != this && 
                 panel.transform.parent == transform.parent && 
@@ -227,33 +240,36 @@ public class UIPanel : MonoBehaviour
     }
     
     /// <summary>
-    /// 獲取所有可見的面板
+    /// [已棄用] 請使用 UIPanelManager.GetVisiblePanels()
     /// </summary>
+    [System.Obsolete("請使用 UIPanelManager.GetVisiblePanels() 代替")]
     public static UIPanel[] GetVisiblePanels()
     {
-        return allActivePanels.FindAll(p => p != null && p.isVisible).ToArray();
+        var manager = FindObjectOfType<UIPanelManager>();
+        return manager != null ? manager.GetVisiblePanels() : new UIPanel[0];
     }
     
     /// <summary>
-    /// 隱藏所有面板
+    /// [已棄用] 請使用 UIPanelManager.HideAllPanels()
     /// </summary>
+    [System.Obsolete("請使用 UIPanelManager.HideAllPanels() 代替")]
     public static void HideAllPanels(bool animated = true)
     {
-        foreach (UIPanel panel in allActivePanels)
+        var manager = FindObjectOfType<UIPanelManager>();
+        if (manager != null)
         {
-            if (panel != null && panel.isVisible)
-            {
-                panel.Hide(animated);
-            }
+            manager.HideAllPanels();
         }
     }
     
     /// <summary>
-    /// 根據名稱查找面板
+    /// [已棄用] 請使用 UIPanelManager.FindPanelByName()
     /// </summary>
+    [System.Obsolete("請使用 UIPanelManager.FindPanelByName() 代替")]
     public static UIPanel FindPanelByName(string name)
     {
-        return allActivePanels.Find(p => p != null && p.panelName == name);
+        var manager = FindObjectOfType<UIPanelManager>();
+        return manager != null ? manager.FindPanelByName(name) : null;
     }
     
     // ==================== 設定持久化 ====================
@@ -305,16 +321,15 @@ public class UIPanel : MonoBehaviour
     }
     
     /// <summary>
-    /// 清除所有面板的持久化數據（靜態方法）
+    /// [已棄用] 請使用 UIPanelManager.ClearAllPersistentData()
     /// </summary>
+    [System.Obsolete("請使用 UIPanelManager.ClearAllPersistentData() 代替")]
     public static void ClearAllPersistentData()
     {
-        foreach (UIPanel panel in allActivePanels)
+        var manager = FindObjectOfType<UIPanelManager>();
+        if (manager != null)
         {
-            if (panel != null && panel.rememberState)
-            {
-                panel.ClearPersistentData();
-            }
+            manager.ClearAllPersistentData();
         }
     }
 

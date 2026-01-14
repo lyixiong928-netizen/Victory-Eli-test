@@ -7,7 +7,7 @@ using UnityEditor.SceneManagement;
 /// </summary>
 public class QuickSceneSetup : EditorWindow
 {
-    [MenuItem("Dark Descent/🌌 自動設定場景")]
+    [MenuItem("Dark Descent/建立物件/📋 快速場景設定")]
     public static void ShowWindow()
     {
         var window = GetWindow<QuickSceneSetup>("場景設定");

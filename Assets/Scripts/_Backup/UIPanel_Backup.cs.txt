@@ -6,8 +6,10 @@ using System;
 /// UI面板基礎類 - 保持簡單清晰的邏輯
 /// 每個面板都能獨立控制開關
 /// 支援智能面板管理和設定持久化
+/// 
+/// 注意：此為備份版本，請勿使用！主版本請參考 Assets/Scripts/UI/UIPanel.cs
 /// </summary>
-public class UIPanel : MonoBehaviour
+public class UIPanel_Backup : MonoBehaviour
 {
     [Header("面板設定")]
     public string panelName = "面板";
@@ -33,12 +35,12 @@ public class UIPanel : MonoBehaviour
     private Text titleText; // 標題文字引用
     
     // 事件系統
-    public event Action<UIPanel> OnPanelShown;
-    public event Action<UIPanel> OnPanelHidden;
-    public event Action<UIPanel> OnPanelToggled;
+    public event Action<UIPanel_Backup> OnPanelShown;
+    public event Action<UIPanel_Backup> OnPanelHidden;
+    public event Action<UIPanel_Backup> OnPanelToggled;
     
     // 靜態管理
-    private static System.Collections.Generic.List<UIPanel> allActivePanels = new System.Collections.Generic.List<UIPanel>();
+    private static System.Collections.Generic.List<UIPanel_Backup> allActivePanels = new System.Collections.Generic.List<UIPanel_Backup>();
 
 #if UNITY_EDITOR
     // 在編輯器中修改數值時自動更新
@@ -211,7 +213,7 @@ public class UIPanel : MonoBehaviour
     {
         if (transform.parent == null) return;
         
-        foreach (UIPanel panel in allActivePanels)
+        foreach (UIPanel_Backup panel in allActivePanels)
         {
             if (panel != null && panel != this && 
                 panel.transform.parent == transform.parent && 
@@ -229,7 +231,7 @@ public class UIPanel : MonoBehaviour
     /// <summary>
     /// 獲取所有可見的面板
     /// </summary>
-    public static UIPanel[] GetVisiblePanels()
+    public static UIPanel_Backup[] GetVisiblePanels()
     {
         return allActivePanels.FindAll(p => p != null && p.isVisible).ToArray();
     }
@@ -239,7 +241,7 @@ public class UIPanel : MonoBehaviour
     /// </summary>
     public static void HideAllPanels(bool animated = true)
     {
-        foreach (UIPanel panel in allActivePanels)
+        foreach (UIPanel_Backup panel in allActivePanels)
         {
             if (panel != null && panel.isVisible)
             {
@@ -251,7 +253,7 @@ public class UIPanel : MonoBehaviour
     /// <summary>
     /// 根據名稱查找面板
     /// </summary>
-    public static UIPanel FindPanelByName(string name)
+    public static UIPanel_Backup FindPanelByName(string name)
     {
         return allActivePanels.Find(p => p != null && p.panelName == name);
     }
@@ -302,20 +304,6 @@ public class UIPanel : MonoBehaviour
     private string GetPersistenceKey()
     {
         return $"UIPanel_{panelName}_State";
-    }
-    
-    /// <summary>
-    /// 清除所有面板的持久化數據（靜態方法）
-    /// </summary>
-    public static void ClearAllPersistentData()
-    {
-        foreach (UIPanel panel in allActivePanels)
-        {
-            if (panel != null && panel.rememberState)
-            {
-                panel.ClearPersistentData();
-            }
-        }
     }
 
     // ==================== 動畫效果 ====================

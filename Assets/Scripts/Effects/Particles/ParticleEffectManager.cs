@@ -62,7 +62,7 @@ public class ParticleEffectManager : MonoBehaviour
         main.gravityModifier = 0.5f;
         
         var emission = boneFragments.emission;
-        emission.rateOverTime = 20f;
+        emission.rateOverTime = 5f; // 降低發射率避免GPU超時
         
         var shape = boneFragments.shape;
         shape.shapeType = ParticleSystemShapeType.Sphere;
@@ -83,7 +83,7 @@ public class ParticleEffectManager : MonoBehaviour
         main.startLifetime = new ParticleSystem.MinMaxCurve(2f, 4f);
         
         var emission = darkFog.emission;
-        emission.rateOverTime = 30f;
+        emission.rateOverTime = 10f; // 降低發射率避免GPU超時
         
         var shape = darkFog.shape;
         shape.shapeType = ParticleSystemShapeType.Cone;
