@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="proGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+        </linearGradient>
+        <filter id="shadow">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3"/>
+        </filter>
+    </defs>
+    
+    <!-- 外圈 -->
+    <circle cx="100" cy="100" r="98" fill="url(#proGrad)" filter="url(#shadow)"/>
+    <circle cx="100" cy="100" r="90" fill="none" stroke="white" stroke-width="2"/>
+    
+    <!-- 星星 -->
+    <path d="M 100 30 L 110 65 L 145 65 L 117 87 L 127 122 L 100 100 L 73 122 L 83 87 L 55 65 L 90 65 Z" fill="#FFD700"/>
+    
+    <!-- Unity 標誌樣式 -->
+    <text x="100" y="145" font-size="18" fill="white" text-anchor="middle" font-weight="bold" font-family="Arial">UNITY PRO</text>
+    <text x="100" y="165" font-size="12" fill="white" text-anchor="middle" font-family="Arial">Victory-Eli</text>
+    <text x="100" y="180" font-size="10" fill="white" text-anchor="middle" font-family="Arial">2026</text>
+</svg>
