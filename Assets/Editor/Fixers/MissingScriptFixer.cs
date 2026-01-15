@@ -130,40 +130,6 @@ public class MissingScriptFixer : Editor
         }
     }
     
-    [MenuItem("DarkDescentDemo/除錯工具/檢查 GhostTrails 組件")]
-    public static void CheckGhostTrailsComponent()
-    {
-        GameObject demo = GameObject.Find("DarkDescentDemo");
-        
-        if (demo == null)
-        {
-            Debug.LogError("❌ 找不到 DarkDescentDemo 物件");
-            return;
-        }
-        
-        GameObject ghostTrails = demo.transform.Find("GhostTrails")?.gameObject;
-        
-        if (ghostTrails == null)
-        {
-            Debug.LogWarning("⚠️ GhostTrails 子物件不存在");
-            Debug.Log("💡 這是正常的，GhostTrails 會在執行時自動創建");
-            return;
-        }
-        
-        Debug.Log($"✅ 找到 GhostTrails 物件");
-        CheckGameObject(ghostTrails);
-        
-        // 檢查所有鬼影
-        if (ghostTrails.transform.childCount > 0)
-        {
-            Debug.Log($"\n檢查 {ghostTrails.transform.childCount} 個鬼影:");
-            foreach (Transform child in ghostTrails.transform)
-            {
-                CheckGameObject(child.gameObject);
-            }
-        }
-    }
-    
     private static string GetGameObjectPath(GameObject obj)
     {
         string path = obj.name;

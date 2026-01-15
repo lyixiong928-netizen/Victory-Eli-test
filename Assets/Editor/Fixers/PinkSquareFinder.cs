@@ -66,8 +66,8 @@ public class PinkSquareFinder : Editor
         if (pinkObjects.Count > 0)
         {
             Debug.LogWarning("\n💡 修復建議：");
-            Debug.LogWarning("1. 如果是鬼影：主角色需要設定精靈圖片");
-            Debug.LogWarning("2. 如果是其他物件：使用「同命蠱 → 快速設定視覺效果」");
+            Debug.LogWarning("1. 確保角色有精靈圖片");
+            Debug.LogWarning("2. 使用「同命蠱 → 快速設定視覺效果」");
             Debug.LogWarning("3. 或使用「除錯工具 → 為粉紅色物件設定精靈」");
         }
     }
