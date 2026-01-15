@@ -123,7 +123,7 @@ public class RebuildFallingCharacter : EditorWindow
 
         // 將 CharacterAnimator 指向子物件的 SpriteRenderer
         SerializedObject animatorSO = new SerializedObject(animator);
-        animatorSO.FindProperty("enableGhostTrail").boolValue = true;
+
         animatorSO.FindProperty("ghostSpawnInterval").floatValue = 0.05f;
         animatorSO.FindProperty("ghostLifetime").floatValue = 0.8f;
         animatorSO.ApplyModifiedProperties();

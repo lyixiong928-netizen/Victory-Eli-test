@@ -76,13 +76,12 @@ public class QuickTwoFrameAnimation : Editor
             EditorUtility.DisplayDialog("錯誤", 
                 "找不到足夠的精靈切片！\n\n請先執行：\n「DarkDescentDemo/修復工具/✂️ 自動切片精靈圖片」", 
                 "確定");
-        Debug.Log($"   精靈1: {sprites[0].name}");
-        Debug.Log($"   精靈2: {sprites[1].name}");
-        
-        // 5. 創建雙幀動畫（1秒間隔 = 1 FPS）
-        Debug.Log("🎬 設定動畫剪輯...");
+            return;
+        }
         
         Debug.Log($"✅ 已載入 {sprites.Length} 個精靈切片");
+        Debug.Log($"   精靈1: {sprites[0].name}");
+        Debug.Log($"   精靈2: {sprites[1].name}");
         
         // 5. 創建雙幀動畫（1秒間隔 = 1 FPS）
         animator.animationClips.Clear();
@@ -95,7 +94,14 @@ public class QuickTwoFrameAnimation : Editor
             loop = true
         });
         
-        // 6. 設定為自動播放
+        // 6. 設定動畫播放參數
+        animator.defaultAnimationName = "雙幀測試";
+        animator.playOnStart = true;
+        animator.showDebugInfo = true;
+        animator.globalTimeScale = 1f;
+        
+        // 7. 設定初始精靈
+        spriteRenderer.sprite = sprites[0];
         Debug.Log($"✅ 設定初始精靈: {sprites[0].name}");
         
         // 8. 調整物件大小以確保可見
@@ -129,15 +135,8 @@ public class QuickTwoFrameAnimation : Editor
         // 10. 聚焦到物件
         SceneView.FrameLastActiveSceneView();
         EditorGUIUtility.PingObject(target);
-        Debug.Log($"幀率: 1 FPS (每幀1秒)");
-        Debug.Log($"循環播放: 是");
-        Debug.Log("\n💡 點擊 Play 按鈕即可看到動畫效果！");
-        Debug.Log("💡 動畫會在兩個幀之間切換，每幀停留1秒");
-        
-        // 9. 聚焦到物件
-        SceneView.FrameLastActiveSceneView();
     }
-    
+
     [MenuItem("DarkDescentDemo/動畫測試/🚀 建立三幀動畫測試 (0.5秒間隔)")]
     public static void CreateThreeFrameAnimation()
     {
@@ -210,7 +209,7 @@ public class QuickTwoFrameAnimation : Editor
         
         SceneView.FrameLastActiveSceneView();
     }
-    
+
     [MenuItem("DarkDescentDemo/動畫測試/📊 顯示當前動畫資訊")]
     public static void ShowAnimationInfo()
     {
@@ -261,19 +260,13 @@ public class QuickTwoFrameAnimation : Editor
             Debug.Log("");
         }
     }
-    
+
     private static Sprite[] LoadSprites()
     {
-        // 搜尋精靈切片
-        string[] guids = AssetDatabase.FindAssets("同命蠱 t:Sprite", new[] { "Assets/Sprites" });
+        // 搜尋所有精靈切片（直接搜索所有 Sprite 更可靠）
+        string[] guids = AssetDatabase.FindAssets("t:Sprite", new[] { "Assets/Sprites" });
         
-        if (guids.Length == 0)
-        {
-            Debug.LogWarning("⚠️ 未找到「同命蠱」精靈，嘗試載入所有精靈...");
-            guids = AssetDatabase.FindAssets("t:Sprite", new[] { "Assets/Sprites" });
-        }
-        
-        // 載入並排序
+        // 載入並過濾排序
         var sprites = guids
             .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
             .SelectMany(path => AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>())

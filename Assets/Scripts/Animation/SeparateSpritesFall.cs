@@ -38,9 +38,6 @@ public class SeparateSpritesFall : MonoBehaviour
     [Tooltip("分離時的顏色")]
     public Color separatedColor = Color.white;
     
-    [Tooltip("是否在分離時添加拖尾效果")]
-    public bool enableGhostTrail = true;
-    
     [Header("觸發設定")]
     [Tooltip("觸發分離的按鍵")]
     public KeyCode triggerKey = KeyCode.Space;
@@ -157,15 +154,6 @@ public class SeparateSpritesFall : MonoBehaviour
         SeparatedSpriteFade fadeScript = separatedObj.AddComponent<SeparatedSpriteFade>();
         fadeScript.fadeOutDuration = fadeOutDuration;
         fadeScript.destroyAfterFade = true;
-        
-        // 添加拖尾效果（可選）
-        if (enableGhostTrail)
-        {
-            SeparatedSpriteGhost ghostScript = separatedObj.AddComponent<SeparatedSpriteGhost>();
-            ghostScript.ghostSpawnInterval = 0.1f;
-            ghostScript.ghostLifetime = 0.5f;
-            ghostScript.ghostColor = new Color(separatedColor.r, separatedColor.g, separatedColor.b, 0.3f);
-        }
     }
     
     /// <summary>
@@ -252,67 +240,6 @@ public class SeparatedSpriteFade : MonoBehaviour
         if (fadeTimer >= fadeOutDuration && destroyAfterFade)
         {
             Destroy(gameObject);
-        }
-    }
-}
-
-/// <summary>
-/// 分離精靈的鬼影拖尾效果
-/// </summary>
-public class SeparatedSpriteGhost : MonoBehaviour
-{
-    public float ghostSpawnInterval = 0.1f;
-    public float ghostLifetime = 0.5f;
-    public Color ghostColor = new Color(1f, 1f, 1f, 0.3f);
-    
-    private SpriteRenderer spriteRenderer;
-    private float ghostTimer = 0f;
-    private GameObject ghostParent;
-    
-    void Start()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        
-        // 創建鬼影父物件
-        ghostParent = new GameObject($"{gameObject.name}_Ghosts");
-    }
-    
-    void Update()
-    {
-        if (spriteRenderer == null || spriteRenderer.sprite == null) return;
-        
-        ghostTimer += Time.deltaTime;
-        
-        if (ghostTimer >= ghostSpawnInterval)
-        {
-            CreateGhost();
-            ghostTimer = 0f;
-        }
-    }
-    
-    void CreateGhost()
-    {
-        GameObject ghost = new GameObject("Ghost");
-        ghost.transform.position = transform.position;
-        ghost.transform.rotation = transform.rotation;
-        ghost.transform.localScale = transform.localScale;
-        ghost.transform.SetParent(ghostParent.transform);
-        
-        SpriteRenderer ghostSR = ghost.AddComponent<SpriteRenderer>();
-        ghostSR.sprite = spriteRenderer.sprite;
-        ghostSR.color = ghostColor;
-        ghostSR.sortingOrder = spriteRenderer.sortingOrder - 1;
-        
-        // 添加淡出效果
-        GhostFade fade = ghost.AddComponent<GhostFade>();
-        fade.lifetime = ghostLifetime;
-    }
-    
-    void OnDestroy()
-    {
-        if (ghostParent != null)
-        {
-            Destroy(ghostParent);
         }
     }
 }

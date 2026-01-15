@@ -38,9 +38,7 @@ public class PinkSquareFinder : Editor
                         // 如果是動畫相關組件，顯示詳細資訊
                         if (comp is CharacterAnimator)
                         {
-                            CharacterAnimator animator = comp as CharacterAnimator;
                             Debug.Log($"       ⚠️ 這個物件有 CharacterAnimator");
-                            Debug.Log($"       Ghost Trail 開啟：{animator.enableGhostTrail}");
                         }
                         
                         if (comp is AdvancedSpriteAnimator)
@@ -56,19 +54,6 @@ public class PinkSquareFinder : Editor
                 if (sr.transform.parent != null)
                 {
                     Debug.Log($"   父物件：{sr.transform.parent.name}");
-                    
-                    // 如果父物件是 GhostTrails，這就是鬼影！
-                    if (sr.transform.parent.name == "GhostTrails")
-                    {
-                        Debug.LogWarning($"   💡 這是鬼影殘像！由 CharacterAnimator 創建");
-                        Debug.LogWarning($"   💡 問題腳本：CharacterAnimator.cs (CreateGhostSprite 方法)");
-                        
-                        GhostFade fade = sr.GetComponent<GhostFade>();
-                        if (fade)
-                        {
-                            Debug.Log($"   GhostFade 存在，生命週期：{fade.lifetime}s");
-                        }
-                    }
                 }
                 
                 Debug.Log("");
@@ -142,35 +127,6 @@ public class PinkSquareFinder : Editor
         else
         {
             Debug.Log("✅ 沒有找到需要修復的物件");
-        }
-    }
-    
-    [MenuItem("DarkDescentDemo/除錯工具/顯示 CharacterAnimator 腳本位置")]
-    public static void ShowCharacterAnimatorScript()
-    {
-        string scriptPath = "Assets/Scripts/CharacterAnimator.cs";
-        
-        Debug.Log("========== CharacterAnimator.cs 分析 ==========");
-        Debug.Log($"腳本路徑：{scriptPath}");
-        Debug.Log("\n⚠️ 問題代碼位置：");
-        Debug.Log("   方法：CreateGhostSprite() (約第 85 行)");
-        Debug.Log("   問題行：ghostRenderer.sprite = spriteRenderer.sprite;");
-        Debug.Log("\n💡 問題原因：");
-        Debug.Log("   如果 spriteRenderer.sprite 是 null");
-        Debug.Log("   那麼創建的鬼影也會是 null");
-        Debug.Log("   Unity 顯示無精靈的物件為粉紅色方形");
-        Debug.Log("\n🔧 解決方案：");
-        Debug.Log("   1. 確保主角色有精靈圖片");
-        Debug.Log("   2. 或在腳本中添加檢查：");
-        Debug.Log("      if (spriteRenderer.sprite == null) return;");
-        
-        // 選中腳本
-        Object script = AssetDatabase.LoadAssetAtPath<Object>(scriptPath);
-        if (script)
-        {
-            Selection.activeObject = script;
-            EditorGUIUtility.PingObject(script);
-            Debug.Log("\n✅ 已在 Project 視窗中選中腳本");
         }
     }
     

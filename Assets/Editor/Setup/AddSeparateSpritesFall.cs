@@ -86,7 +86,7 @@ public class AddSeparateSpritesFall : EditorWindow
         so.FindProperty("separatedScale").floatValue = 1.5f;
         so.FindProperty("fadeOutDuration").floatValue = 3f;
         so.FindProperty("separatedColor").colorValue = Color.white;
-        so.FindProperty("enableGhostTrail").boolValue = true;
+
         so.FindProperty("triggerKey").intValue = (int)KeyCode.Space;
         so.FindProperty("autoTriggerAtHalfway").boolValue = false;
         
