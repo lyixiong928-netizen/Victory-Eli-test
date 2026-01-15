@@ -6,8 +6,8 @@ using UnityEditor;
 /// </summary>
 public class CreateFallingCharacter : EditorWindow
 {
-    [MenuItem("GameObject/DarkDescent/創建 FallingCharacter", false, 0)]
-    [MenuItem("DarkDescentDemo/快速創建/🎭 創建 FallingCharacter", false, 20)]
+    [MenuItem(MenuPaths.GAMEOBJECT_CREATE_CHARACTER, false, 0)]
+    [MenuItem(MenuPaths.QUICK_CREATE_CHARACTER, false, MenuPaths.PRIORITY_QUICK_START + 20)]
     public static void CreateCharacter()
     {
         if (EditorApplication.isPlaying)
@@ -129,7 +129,7 @@ public class CreateFallingCharacter : EditorWindow
         EditorGUIUtility.PingObject(parent);
     }
 
-    [MenuItem("DarkDescentDemo/快速創建/🔍 尋找 FallingCharacter", false, 21)]
+    [MenuItem(MenuPaths.QUICK_FIND_CHARACTER, false, MenuPaths.PRIORITY_QUICK_START + 40)]
     public static void FindCharacter()
     {
         GameObject fallingChar = GameObject.Find("FallingCharacter");

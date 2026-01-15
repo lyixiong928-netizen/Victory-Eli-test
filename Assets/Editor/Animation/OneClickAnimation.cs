@@ -7,7 +7,7 @@ using System.Linq;
 /// </summary>
 public class OneClickAnimation : EditorWindow
 {
-    [MenuItem("DarkDescentDemo/🎬 一鍵動畫設定")]
+    [MenuItem(MenuPaths.QUICK_SETUP_ANIMATION, false, MenuPaths.PRIORITY_QUICK_START + 10)]
     public static void ShowWindow()
     {
         var window = GetWindow<OneClickAnimation>("一鍵動畫");

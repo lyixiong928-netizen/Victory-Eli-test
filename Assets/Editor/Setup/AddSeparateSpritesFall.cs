@@ -7,7 +7,7 @@ using UnityEditor;
 /// </summary>
 public class AddSeparateSpritesFall : EditorWindow
 {
-    [MenuItem("DarkDescentDemo/快速創建/✨ 添加分離精靈墜落效果", false, 25)]
+    [MenuItem(MenuPaths.QUICK_ADD_EFFECTS, false, MenuPaths.PRIORITY_QUICK_START + 30)]
     public static void AddEffect()
     {
         // 檢查是否在 Play 模式

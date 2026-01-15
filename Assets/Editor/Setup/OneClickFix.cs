@@ -2,12 +2,11 @@ using UnityEngine;
 using UnityEditor;
 
 /// <summary>
-/// 一鍵完整修復工具 - 解決所有桃色方塊問題
-/// 使用方法：選單 → DarkDescentDemo → 🔧 一鍵完整修復
+/// 一鍵完整修復工具 - 解決所有常見問題
 /// </summary>
 public class OneClickFix : EditorWindow
 {
-    [MenuItem("DarkDescentDemo/🔧 一鍵完整修復（解決桃色方塊）", false, -1)]
+    [MenuItem(MenuPaths.QUICK_FIX_ALL, false, MenuPaths.PRIORITY_QUICK_START + 50)]
     public static void CompleteFixAll()
     {
         // 檢查是否在 Play 模式中
