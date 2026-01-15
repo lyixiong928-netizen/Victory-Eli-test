@@ -120,13 +120,14 @@ public class MenuReorganizer : EditorWindow
     {
         string content = File.ReadAllText(filePath);
         
-        // 匹配 MenuItem 屬性
-        var pattern = @"\[MenuItem\s*\(\s*""([^""]+)""\s*(?:,\s*false\s*,\s*(\d+))?\s*\)\]";
+        // 匹配 MenuItem 屬性 - 完整保留所有參數
+        var pattern = @"\[MenuItem\s*\(\s*""([^""]+)""([^\]]*)\)\]";
         var matches = Regex.Matches(content, pattern);
         
         foreach (Match match in matches)
         {
             string oldPath = match.Groups[1].Value;
+            string parameters = match.Groups[2].Value; // 保留所有其他參數
             
             // 只處理 DarkDescentDemo 開頭的
             if (!oldPath.StartsWith("DarkDescentDemo/") && !oldPath.StartsWith("GameObject/DarkDescent"))
@@ -141,7 +142,7 @@ public class MenuReorganizer : EditorWindow
                     FilePath = filePath,
                     OldPath = oldPath,
                     NewPath = newPath,
-                    OldPriority = match.Groups[2].Success ? match.Groups[2].Value : "",
+                    Parameters = parameters,
                     FullMatch = match.Value
                 });
             }
@@ -252,7 +253,8 @@ public class MenuReorganizer : EditorWindow
         
         foreach (var item in items)
         {
-            string newMenuItem = $"[MenuItem(\"{item.NewPath}\"{(string.IsNullOrEmpty(item.OldPriority) ? "" : $", false, {item.OldPriority}")})]";
+            // 保留所有原始參數（validate, priority 等）
+            string newMenuItem = $"[MenuItem(\"{item.NewPath}\"{item.Parameters})]";
             
             if (content.Contains(item.FullMatch))
             {
@@ -274,7 +276,7 @@ public class MenuReorganizer : EditorWindow
         public string FilePath;
         public string OldPath;
         public string NewPath;
-        public string OldPriority;
+        public string Parameters;  // 保留所有參數：validate, priority 等
         public string FullMatch;
     }
 }
