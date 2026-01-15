@@ -30,7 +30,7 @@ public static class ObjectNamingUtility
     }
     
     // 批量重命名場景中的物件
-    [MenuItem("Dark Descent/工具/標準化物件命名")]
+    [MenuItem("DD Debug/工具/標準化物件命名")]
     public static void StandardizeAllObjectNames()
     {
         int renamedCount = 0;
@@ -90,7 +90,7 @@ public static class ObjectNamingUtility
     }
     
     // 創建常用類型的物件（使用標準命名）
-    [MenuItem("Dark Descent/創建物件/Create_Background")]
+    [MenuItem("DD Setup/創建物件/Create_Background")]
     public static void CreateBackground()
     {
         GameObject obj = CreateNamedObject("Background");
@@ -101,7 +101,7 @@ public static class ObjectNamingUtility
         Debug.Log("✅ 已創建 Create_Background");
     }
     
-    [MenuItem("Dark Descent/創建物件/Create_Character")]
+    [MenuItem("DD Setup/創建物件/Create_Character")]
     public static void CreateCharacter()
     {
         GameObject obj = CreateNamedObject("Character");
@@ -111,7 +111,7 @@ public static class ObjectNamingUtility
         Debug.Log("✅ 已創建 Create_Character");
     }
     
-    [MenuItem("Dark Descent/創建物件/Create_Particle")]
+    [MenuItem("DD Effects/創建物件/Create_Particle")]
     public static void CreateParticle()
     {
         GameObject obj = CreateNamedObject("Particle");
@@ -120,7 +120,7 @@ public static class ObjectNamingUtility
         Debug.Log("✅ 已創建 Create_Particle");
     }
     
-    [MenuItem("Dark Descent/創建物件/Create_Audio")]
+    [MenuItem("DD Setup/創建物件/Create_Audio")]
     public static void CreateAudio()
     {
         GameObject obj = CreateNamedObject("Audio");
@@ -129,7 +129,7 @@ public static class ObjectNamingUtility
         Debug.Log("✅ 已創建 Create_Audio");
     }
     
-    [MenuItem("Dark Descent/創建物件/Create_Empty")]
+    [MenuItem("DD Setup/創建物件/Create_Empty")]
     public static void CreateEmpty()
     {
         GameObject obj = CreateNamedObject("Empty");
@@ -143,7 +143,7 @@ public static class ObjectNamingUtility
 /// </summary>
 public class StandardizedObjectCreation
 {
-    [MenuItem("Dark Descent/快速創建/CreateCreate_完整場景")]
+    [MenuItem("DD Setup/快速創建/CreateCreate_完整場景")]
     public static void CreateCreateFullScene()
     {
         GameObject root = ObjectNamingUtility.CreateNamedObject("Scene", "Root");
@@ -171,7 +171,7 @@ public class StandardizedObjectCreation
         Debug.Log("📋 包含: Create_Background, Create_Character_Main, Create_Particles_System");
     }
     
-    [MenuItem("Dark Descent/快速創建/CreateCreate_三角色系統")]
+    [MenuItem("DD Setup/快速創建/CreateCreate_三角色系統")]
     public static void CreateCreateThreeCharacters()
     {
         GameObject root = ObjectNamingUtility.CreateNamedObject("ThreeCharacters", "System");

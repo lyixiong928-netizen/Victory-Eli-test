@@ -15,7 +15,7 @@ public class CodeQualityChecker : EditorWindow
     private int warningCount = 0;
     private int errorCount = 0;
     
-    [MenuItem("Dark Descent/🔧 Tools/Code Quality/Check Quality")]
+    [MenuItem("DD Debug/🔧 Tools/Code Quality/Check Quality")]
     public static void ShowWindow()
     {
         var window = GetWindow<CodeQualityChecker>("程式碼品質檢查");

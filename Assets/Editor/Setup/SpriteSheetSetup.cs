@@ -11,7 +11,7 @@ public class SpriteSheetSetup : EditorWindow
     private Texture2D spriteSheet;
     private string spritePath = "Assets/Sprites/建立影像 同命蠱.png";
     
-    [MenuItem("Dark Descent/🎨 設定角色 Sprite Sheet")]
+    [MenuItem("DD Setup/🎨 設定角色 Sprite Sheet")]
     static void ShowWindow()
     {
         var window = GetWindow<SpriteSheetSetup>("Sprite Sheet 設定");

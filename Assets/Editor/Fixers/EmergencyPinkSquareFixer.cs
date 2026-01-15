@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public class EmergencyPinkSquareFixer : EditorWindow
 {
-    [MenuItem("Dark Descent/🚨 緊急修復粉紅色方塊 #F1")]
+    [MenuItem("DD Debug/🚨 緊急修復粉紅色方塊 #F1")]
     public static void EmergencyFix()
     {
         int fixedCount = 0;
@@ -224,7 +224,7 @@ public class EmergencyPinkSquareFixer : EditorWindow
         return removedCount;
     }
     
-    [MenuItem("Dark Descent/🔍 診斷粉紅色問題")]
+    [MenuItem("DD Debug/🔍 診斷粉紅色問題")]
     public static void DiagnosePinkSquares()
     {
         Debug.Log("========== 🔍 診斷粉紅色問題 ==========");

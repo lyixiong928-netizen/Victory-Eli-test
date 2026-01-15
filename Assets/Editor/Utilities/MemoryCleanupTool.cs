@@ -6,7 +6,7 @@ using UnityEditor;
 /// </summary>
 public class MemoryCleanupTool : EditorWindow
 {
-    [MenuItem("Dark Descent/🧹 清理記憶體/清除 Missing Scripts")]
+    [MenuItem("DD Debug/🧹 清理記憶體/清除 Missing Scripts")]
     public static void CleanupMissingScripts()
     {
         int cleanedCount = 0;
@@ -67,7 +67,7 @@ public class MemoryCleanupTool : EditorWindow
         );
     }
     
-    [MenuItem("Dark Descent/🧹 清理記憶體/深度記憶體清理")]
+    [MenuItem("DD Debug/🧹 清理記憶體/深度記憶體清理")]
     public static void DeepMemoryCleanup()
     {
         Debug.Log("========== 🧹 深度記憶體清理 ==========");
@@ -164,7 +164,7 @@ public class MemoryCleanupTool : EditorWindow
         Debug.Log("   ✅ 已執行強制記憶體回收");
     }
     
-    [MenuItem("Dark Descent/🧹 清理記憶體/顯示記憶體使用情況")]
+    [MenuItem("DD Debug/🧹 清理記憶體/顯示記憶體使用情況")]
     public static void ShowMemoryUsage()
     {
         // 取得記憶體資訊

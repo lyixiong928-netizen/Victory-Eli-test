@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MissingScriptFixer : Editor
 {
-    [MenuItem("Dark Descent/🐛 Debug/Inspector/Find Missing Scripts")]
+    [MenuItem("DD Debug/Inspector/Find Missing Scripts")]
     public static void FindMissingScripts()
     {
         Debug.Log("========== 搜尋遺失的腳本 ==========");
@@ -42,7 +42,7 @@ public class MissingScriptFixer : Editor
         }
     }
     
-    [MenuItem("Dark Descent/🐛 Debug/Quick Fix/Remove Missing Scripts")]
+    [MenuItem("DD Debug/Quick Fix/Remove Missing Scripts")]
     public static void RemoveMissingScripts()
     {
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();

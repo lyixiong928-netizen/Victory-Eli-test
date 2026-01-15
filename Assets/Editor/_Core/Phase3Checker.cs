@@ -18,7 +18,7 @@ public class Phase3Checker : EditorWindow
     private bool menuReorganizeDone = false;
     private bool documentationDone = false;
     
-    [MenuItem("Dark Descent/⚙️ Settings/Phase 3 - Staging Checker", false, 650)]
+    [MenuItem("DD Setup/⚙️ Settings/Phase 3 - Staging Checker", false, 650)]
     public static void ShowWindow()
     {
         var window = GetWindow<Phase3Checker>("Phase 3 檢查器");

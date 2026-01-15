@@ -11,7 +11,7 @@ public class DarkDescentSetupWizard : EditorWindow
     private bool setupComplete = false;
     private string statusMessage = "準備開始自動設定...";
 
-    [MenuItem("Dark Descent/🌌 自動設定場景")]
+    [MenuItem("DD Setup/🌌 自動設定場景")]
     public static void ShowWindow()
     {
         var window = GetWindow<DarkDescentSetupWizard>("Dark Descent Setup");

@@ -7,7 +7,7 @@ using UnityEditor;
 /// </summary>
 public class MenuValidator : EditorWindow
 {
-    [MenuItem("Dark Descent/🔧 檢查選單項目")]
+    [MenuItem("DD Debug/🔧 檢查選單項目")]
     public static void ShowWindow()
     {
         var window = GetWindow<MenuValidator>("選單檢查器");

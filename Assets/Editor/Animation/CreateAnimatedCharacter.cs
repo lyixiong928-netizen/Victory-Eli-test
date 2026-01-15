@@ -4,7 +4,7 @@ using System.Linq;
 
 public class CreateAnimatedCharacter : Editor
 {
-    [MenuItem("Dark Descent/建立物件/完整動畫角色")]
+    [MenuItem("DD Effects/建立物件/完整動畫角色")]
     public static void CreateFullAnimatedCharacter()
     {
         // 1. 創建主物件（使用標準命名）
@@ -70,7 +70,7 @@ public class CreateAnimatedCharacter : Editor
     }
     
     // 只創建空物件（保留原功能）
-    [MenuItem("Dark Descent/建立物件/空的動畫物件")]
+    [MenuItem("DD Effects/建立物件/空的動畫物件")]
     public static void CreateEmptyOnly()
     {
         GameObject animatedCharacter = new GameObject("AnimatedCharacter");
@@ -81,7 +81,7 @@ public class CreateAnimatedCharacter : Editor
     }
     
     // 添加到現有物件
-    [MenuItem("Dark Descent/建立物件/為選中物件添加動畫")]
+    [MenuItem("DD Effects/建立物件/為選中物件添加動畫")]
     public static void AddAnimationToSelected()
     {
         GameObject selected = Selection.activeGameObject;

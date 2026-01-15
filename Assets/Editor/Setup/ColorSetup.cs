@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ColorSetup : Editor
 {
-    [MenuItem("Dark Descent/顏色設定/開啟顏色調整器")]
+    [MenuItem("DD Setup/顏色設定/開啟顏色調整器")]
     public static void OpenColorAdjuster()
     {
         GameObject selected = Selection.activeGameObject;
@@ -24,63 +24,63 @@ public class ColorSetup : Editor
         ColorAdjusterWindow.ShowWindow(sr);
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/預設顏色/正常白色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/預設顏色/正常白色")]
     public static void SetNormalWhite()
     {
         SetColorForSelected(Color.white);
         Debug.Log("✅ 已設定為正常白色");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/預設顏色/詛咒紅色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/預設顏色/詛咒紅色")]
     public static void SetCurseRed()
     {
         SetColorForSelected(new Color(1f, 0.3f, 0.3f, 1f));
         Debug.Log("✅ 已設定為詛咒紅色");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/預設顏色/幽魂藍色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/預設顏色/幽魂藍色")]
     public static void SetGhostBlue()
     {
         SetColorForSelected(new Color(0.5f, 0.7f, 1f, 1f));
         Debug.Log("✅ 已設定為幽魂藍色");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/預設顏色/黑暗紫色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/預設顏色/黑暗紫色")]
     public static void SetDarkPurple()
     {
         SetColorForSelected(new Color(0.6f, 0.3f, 0.8f, 1f));
         Debug.Log("✅ 已設定為黑暗紫色");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/預設顏色/靈魂綠色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/預設顏色/靈魂綠色")]
     public static void SetSoulGreen()
     {
         SetColorForSelected(new Color(0.3f, 1f, 0.5f, 1f));
         Debug.Log("✅ 已設定為靈魂綠色");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/透明度/完全不透明")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/透明度/完全不透明")]
     public static void SetFullOpaque()
     {
         SetAlphaForSelected(1f);
         Debug.Log("✅ 已設定為完全不透明");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/透明度/半透明")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/透明度/半透明")]
     public static void SetHalfTransparent()
     {
         SetAlphaForSelected(0.5f);
         Debug.Log("✅ 已設定為半透明");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/透明度/幽靈透明")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/透明度/幽靈透明")]
     public static void SetGhostTransparent()
     {
         SetAlphaForSelected(0.7f);
         Debug.Log("✅ 已設定為幽靈透明度");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/為所有角色設定漸變色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/為所有角色設定漸變色")]
     public static void SetGradientForAll()
     {
         GameObject parent = GameObject.Find("同命蠱三幀抖動");
@@ -110,7 +110,7 @@ public class ColorSetup : Editor
         Debug.Log($"✅ 已為 {i} 個角色設定漸變色（紅→紫→藍）");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Presets/重置所有角色顏色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Presets/重置所有角色顏色")]
     public static void ResetAllColors()
     {
         GameObject parent = GameObject.Find("同命蠱三幀抖動");

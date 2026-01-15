@@ -8,7 +8,7 @@ using UnityEditor.SceneManagement;
 /// </summary>
 public class ErrorMassRemover : EditorWindow
 {
-    [MenuItem("Dark Descent/🧹 一鍵清除所有錯誤")]
+    [MenuItem("DD Debug/🧹 一鍵清除所有錯誤")]
     public static void ShowWindow()
     {
         var window = GetWindow<ErrorMassRemover>("錯誤清除工具");

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ForceReimport : EditorWindow
 {
-    [MenuItem("Dark Descent/⚡ 強制重新匯入資源")]
+    [MenuItem("DD Debug/⚡ 強制重新匯入資源")]
     public static void ShowWindow()
     {
         var window = GetWindow<ForceReimport>("強制重新匯入");
@@ -136,7 +136,7 @@ public class ForceReimport : EditorWindow
             "確定");
     }
 
-    [MenuItem("Dark Descent/📋 顯示專案資訊")]
+    [MenuItem("DD Debug/📋 顯示專案資訊")]
     public static void ShowProjectInfo()
     {
         string info = "=== Unity 專案資訊 ===\n\n";

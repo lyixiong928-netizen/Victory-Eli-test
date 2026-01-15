@@ -14,7 +14,7 @@ public class ProjectHealthCheck : EditorWindow
     private List<string> fixes = new List<string>();
     private bool hasRunCheck = false;
     
-    [MenuItem("Dark Descent/🏥 專案健康檢查")]
+    [MenuItem("DD Debug/🏥 專案健康檢查")]
     public static void ShowWindow()
     {
         var window = GetWindow<ProjectHealthCheck>("專案健康檢查");

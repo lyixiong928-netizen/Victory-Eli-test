@@ -313,7 +313,7 @@ public class WarningFixPairWindow : EditorWindow
 {
     private Vector2 scrollPosition;
     
-    [MenuItem("Dark Descent/🔧 警告修復配對系統")]
+    [MenuItem("DD Debug/🔧 警告修復配對系統")]
     public static void ShowWindow()
     {
         var window = GetWindow<WarningFixPairWindow>("警告修復配對");

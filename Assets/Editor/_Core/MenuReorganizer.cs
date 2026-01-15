@@ -16,7 +16,7 @@ public class MenuReorganizer : EditorWindow
     private bool isScanned = false;
     private int updatedCount = 0;
     
-    [MenuItem("Dark Descent/⚙️ Settings/Menu Reorganizer", false, 600)]
+    [MenuItem("DD Setup/⚙️ Settings/Menu Reorganizer", false, 600)]
     public static void ShowWindow()
     {
         var window = GetWindow<MenuReorganizer>("選單重組工具");

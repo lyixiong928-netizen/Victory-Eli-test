@@ -9,7 +9,7 @@ using System.Reflection;
 /// </summary>
 public class AutoSliceSprite : EditorWindow
 {
-    [MenuItem("Dark Descent/🔧 Tools/Sprite/Auto Slice", false, 0)]
+    [MenuItem("DD Debug/🔧 Tools/Sprite/Auto Slice", false, 0)]
     public static void SliceSprite()
     {
         // 檢查是否在 Play 模式中
@@ -112,7 +112,7 @@ public class AutoSliceSprite : EditorWindow
         };
     }
 
-    [MenuItem("Dark Descent/🔧 Tools/Sprite/Show Info", false, 4)]
+    [MenuItem("DD Debug/🔧 Tools/Sprite/Show Info", false, 4)]
     public static void ShowSpriteInfo()
     {
         string spritePath = "Assets/Sprites/建立影像 同命蠱.png";

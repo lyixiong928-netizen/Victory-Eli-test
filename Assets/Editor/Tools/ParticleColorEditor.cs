@@ -15,7 +15,7 @@ public class ParticleColorEditor : EditorWindow
     private Color soulColor = new Color(0.5f, 0.8f, 1f, 1f);        // 靈魂藍色
     private Color creatureColor = new Color(0.6f, 0.2f, 0.2f, 0.7f); // 生物紅色
     
-    [MenuItem("Dark Descent/✨ Effects/Particles/Color Editor")]
+    [MenuItem("DD Effects/Particles/Color Editor")]
     public static void ShowWindow()
     {
         var window = GetWindow<ParticleColorEditor>("粒子顏色編輯器");

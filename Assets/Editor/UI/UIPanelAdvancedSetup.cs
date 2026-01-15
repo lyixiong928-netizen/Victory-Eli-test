@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UIPanelAdvancedSetup : EditorWindow
 {
-    [MenuItem("Dark Descent/UI系統/建立表單面板")]
+    [MenuItem("DD Setup/UI系統/建立表單面板")]
     public static void CreateFormPanel()
     {
         GameObject canvasObj = GameObject.Find("Canvas");
@@ -82,7 +82,7 @@ public class UIPanelAdvancedSetup : EditorWindow
         Debug.Log("✅ 表單面板建立完成！");
     }
 
-    [MenuItem("Dark Descent/UI系統/添加動畫效果")]
+    [MenuItem("DD Effects/UI系統/添加動畫效果")]
     public static void AddAnimationToSelectedPanel()
     {
         GameObject selected = Selection.activeGameObject;

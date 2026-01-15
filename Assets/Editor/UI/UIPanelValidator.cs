@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public class UIPanelValidator : EditorWindow
 {
-    [MenuItem("Dark Descent/UI系統/檢查系統健康狀態")]
+    [MenuItem("DD Debug/UI系統/檢查系統健康狀態")]
     public static void ValidateUIPanelSystem()
     {
         Debug.Log("========== 🔍 UI面板系統健康檢查 ==========\n");
@@ -170,7 +170,7 @@ public class UIPanelValidator : EditorWindow
         Debug.Log($"   • 註冊了 {manager.allPanels.Count - nullCount} 個有效面板");
     }
 
-    [MenuItem("Dark Descent/UI系統/自動修復常見問題")]
+    [MenuItem("DD Debug/UI系統/自動修復常見問題")]
     public static void AutoFixCommonIssues()
     {
         Debug.Log("========== 🔧 自動修復 UI 系統 ==========\n");
@@ -238,7 +238,7 @@ public class UIPanelValidator : EditorWindow
         }
     }
 
-    [MenuItem("Dark Descent/UI系統/清理所有UI面板")]
+    [MenuItem("DD Debug/UI系統/清理所有UI面板")]
     public static void CleanupAllUIPanels()
     {
         if (!EditorUtility.DisplayDialog("確認清理", 

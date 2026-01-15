@@ -7,7 +7,7 @@ using System.Linq;
 /// </summary>
 public class QuickTwoFrameAnimation : Editor
 {
-    [MenuItem("Dark Descent/🎬 Animation/Test/Test 2-Frame Animation")]
+    [MenuItem("DD Effects/🎬 Animation/Test/Test 2-Frame Animation")]
     public static void CreateTwoFrameAnimation()
     {
         Debug.Log("======================================");
@@ -137,7 +137,7 @@ public class QuickTwoFrameAnimation : Editor
         EditorGUIUtility.PingObject(target);
     }
 
-    [MenuItem("Dark Descent/🎬 Animation/Test/Test 3-Frame Animation")]
+    [MenuItem("DD Effects/🎬 Animation/Test/Test 3-Frame Animation")]
     public static void CreateThreeFrameAnimation()
     {
         // 1. 檢查是否選中物件
@@ -210,7 +210,7 @@ public class QuickTwoFrameAnimation : Editor
         SceneView.FrameLastActiveSceneView();
     }
 
-    [MenuItem("Dark Descent/🎬 Animation/Test/Show Animation Info")]
+    [MenuItem("DD Effects/🎬 Animation/Test/Show Animation Info")]
     public static void ShowAnimationInfo()
     {
         GameObject target = Selection.activeGameObject;

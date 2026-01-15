@@ -10,7 +10,7 @@ public class BackgroundFixer : EditorWindow
     private Vector2 scrollPosition;
     private string diagnosticReport = "";
     
-    [MenuItem("Dark Descent/🔧 Background 診斷與修復")]
+    [MenuItem("DD Debug/🔧 Background 診斷與修復")]
     public static void ShowWindow()
     {
         var window = GetWindow<BackgroundFixer>("Background 修復工具");

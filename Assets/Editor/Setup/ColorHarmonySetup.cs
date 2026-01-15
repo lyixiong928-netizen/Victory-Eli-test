@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ColorHarmonySetup : Editor
 {
-    [MenuItem("Dark Descent/顏色協調/啟用顏色協調系統")]
+    [MenuItem("DD Setup/顏色協調/啟用顏色協調系統")]
     public static void EnableColorHarmony()
     {
         // 檢查是否已有管理器
@@ -31,35 +31,35 @@ public class ColorHarmonySetup : Editor
         Debug.Log("🎨 現在點擊背景，角色顏色會自動協調變化！");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/互補色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/互補色")]
     public static void SetComplementary()
     {
         SetMode(ColorHarmonyManager.HarmonyMode.Complementary);
         Debug.Log("🎨 已設定為互補色模式（對比強烈）");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/相鄰色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/相鄰色")]
     public static void SetAnalogous()
     {
         SetMode(ColorHarmonyManager.HarmonyMode.Analogous);
         Debug.Log("🎨 已設定為相鄰色模式（柔和漸變）");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/三角色")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/三角色")]
     public static void SetTriadic()
     {
         SetMode(ColorHarmonyManager.HarmonyMode.Triadic);
         Debug.Log("🎨 已設定為三角色模式（平衡豐富）");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/明亮對比")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/明亮對比")]
     public static void SetBright()
     {
         SetMode(ColorHarmonyManager.HarmonyMode.Bright);
         Debug.Log("🎨 已設定為明亮對比模式（清晰突出）");
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/單色調")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/協調模式/單色調")]
     public static void SetMonochromatic()
     {
         SetMode(ColorHarmonyManager.HarmonyMode.Monochromatic);
@@ -78,7 +78,7 @@ public class ColorHarmonySetup : Editor
         manager.SetHarmonyMode(mode);
     }
     
-    [MenuItem("Dark Descent/🎨 Scene Setup/Color Theme/Color Harmony/測試協調效果")]
+    [MenuItem("DD Setup/🎨 Scene Setup/Color Theme/Color Harmony/測試協調效果")]
     public static void TestHarmony()
     {
         ColorHarmonyManager manager = Object.FindObjectOfType<ColorHarmonyManager>();

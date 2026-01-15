@@ -9,7 +9,7 @@ public class UnifiedMenuSystem
 {
     // ==================== 🚀 快速開始 ====================
     
-    [MenuItem("Dark Descent/🚀 快速開始/新手引導", false, 1)]
+    [MenuItem("DD Setup/🚀 快速開始/新手引導", false, 1)]
     public static void ShowQuickStart()
     {
         EditorUtility.DisplayDialog("🚀 Dark Descent 快速開始",
@@ -28,13 +28,13 @@ public class UnifiedMenuSystem
         CreateCompleteScene();
     }
     
-    [MenuItem("Dark Descent/🚀 快速開始/一鍵創建完整場景", false, 2)]
+    [MenuItem("DD Setup/🚀 快速開始/一鍵創建完整場景", false, 2)]
     public static void CreateCompleteScene()
     {
         EditorWindow.GetWindow<UnifiedSceneCreator>("場景創建器");
     }
     
-    [MenuItem("Dark Descent/🚀 快速開始/測試現有場景", false, 3)]
+    [MenuItem("DD Debug/🚀 快速開始/測試現有場景", false, 3)]
     public static void TestCurrentScene()
     {
         if (EditorApplication.isPlaying)
@@ -51,31 +51,31 @@ public class UnifiedMenuSystem
     
     // ==================== ✨ 創建 ====================
     
-    [MenuItem("Dark Descent/✨ 創建/角色/三角色系統（骷髏、女子、黑暗）", false, 101)]
+    [MenuItem("DD Setup/✨ 創建/角色/三角色系統（骷髏、女子、黑暗）", false, 101)]
     public static void CreateThreeCharacters()
     {
         StandardizedObjectCreation.CreateCreateThreeCharacters();
     }
     
-    [MenuItem("Dark Descent/✨ 創建/角色/單一角色", false, 102)]
+    [MenuItem("DD Setup/✨ 創建/角色/單一角色", false, 102)]
     public static void CreateSingleCharacter()
     {
         ObjectNamingUtility.CreateCharacter();
     }
     
-    [MenuItem("Dark Descent/✨ 創建/背景/可點擊背景", false, 111)]
+    [MenuItem("DD Setup/✨ 創建/背景/可點擊背景", false, 111)]
     public static void CreateBackground()
     {
         ObjectNamingUtility.CreateBackground();
     }
     
-    [MenuItem("Dark Descent/✨ 創建/效果/粒子系統", false, 121)]
+    [MenuItem("DD Effects/✨ 創建/效果/粒子系統", false, 121)]
     public static void CreateParticle()
     {
         ObjectNamingUtility.CreateParticle();
     }
     
-    [MenuItem("Dark Descent/✨ 創建/音效/音效管理器", false, 131)]
+    [MenuItem("DD Setup/✨ 創建/音效/音效管理器", false, 131)]
     public static void CreateAudio()
     {
         ObjectNamingUtility.CreateAudio();
@@ -83,31 +83,31 @@ public class UnifiedMenuSystem
     
     // ==================== 🔧 修復 ====================
     
-    [MenuItem("Dark Descent/🔧 修復/一鍵修復所有問題 #F1", false, 201)]
+    [MenuItem("DD Debug/🔧 修復/一鍵修復所有問題 #F1", false, 201)]
     public static void FixAll()
     {
         EditorWindow.GetWindow<MasterFixerWindow>("一鍵修復");
     }
     
-    [MenuItem("Dark Descent/🔧 修復/清除粉紅色方塊", false, 202)]
+    [MenuItem("DD Debug/🔧 修復/清除粉紅色方塊", false, 202)]
     public static void FixPinkSquares()
     {
         EmergencyPinkSquareFixer.EmergencyFix();
     }
     
-    [MenuItem("Dark Descent/🔧 修復/清除 Missing Scripts", false, 203)]
+    [MenuItem("DD Debug/🔧 修復/清除 Missing Scripts", false, 203)]
     public static void FixMissingScripts()
     {
         MemoryCleanupTool.CleanupMissingScripts();
     }
     
-    [MenuItem("Dark Descent/🔧 修復/修復背景問題", false, 204)]
+    [MenuItem("DD Debug/🔧 修復/修復背景問題", false, 204)]
     public static void FixBackground()
     {
         BackgroundFixer.ShowWindow();
     }
     
-    [MenuItem("Dark Descent/🔧 修復/警告修復配對系統", false, 205)]
+    [MenuItem("DD Debug/🔧 修復/警告修復配對系統", false, 205)]
     public static void ShowWarningFixes()
     {
         WarningFixPairWindow.ShowWindow();
@@ -115,13 +115,13 @@ public class UnifiedMenuSystem
     
     // ==================== 💾 記憶體 ====================
     
-    [MenuItem("Dark Descent/💾 記憶體/顯示記憶體使用", false, 301)]
+    [MenuItem("DD Debug/💾 記憶體/顯示記憶體使用", false, 301)]
     public static void ShowMemoryUsage()
     {
         MemoryCleanupTool.ShowMemoryUsage();
     }
     
-    [MenuItem("Dark Descent/💾 記憶體/深度清理", false, 302)]
+    [MenuItem("DD Debug/💾 記憶體/深度清理", false, 302)]
     public static void DeepCleanup()
     {
         MemoryCleanupTool.DeepMemoryCleanup();
@@ -129,19 +129,19 @@ public class UnifiedMenuSystem
     
     // ==================== 🎨 顏色 ====================
     
-    [MenuItem("Dark Descent/🎨 顏色/啟用顏色協調系統", false, 401)]
+    [MenuItem("DD Setup/🎨 顏色/啟用顏色協調系統", false, 401)]
     public static void EnableColorHarmony()
     {
         ColorHarmonySetup.EnableColorHarmony();
     }
     
-    [MenuItem("Dark Descent/🎨 顏色/設定互補色", false, 402)]
+    [MenuItem("DD Setup/🎨 顏色/設定互補色", false, 402)]
     public static void SetComplementary()
     {
         ColorHarmonySetup.SetComplementary();
     }
     
-    [MenuItem("Dark Descent/🎨 顏色/設定三角色", false, 403)]
+    [MenuItem("DD Setup/🎨 顏色/設定三角色", false, 403)]
     public static void SetTriadic()
     {
         ColorHarmonySetup.SetTriadic();
@@ -149,19 +149,19 @@ public class UnifiedMenuSystem
     
     // ==================== 🔍 診斷 ====================
     
-    [MenuItem("Dark Descent/🔍 診斷/場景健康檢查", false, 501)]
+    [MenuItem("DD Debug/🔍 診斷/場景健康檢查", false, 501)]
     public static void HealthCheck()
     {
         QuickSceneCheck();
     }
     
-    [MenuItem("Dark Descent/🔍 診斷/列出所有物件", false, 502)]
+    [MenuItem("DD Debug/🔍 診斷/列出所有物件", false, 502)]
     public static void ListAllObjects()
     {
         SceneObjectInspector.ListAllSceneObjects();
     }
     
-    [MenuItem("Dark Descent/🔍 診斷/診斷粉紅色問題", false, 503)]
+    [MenuItem("DD Debug/🔍 診斷/診斷粉紅色問題", false, 503)]
     public static void DiagnosePink()
     {
         EmergencyPinkSquareFixer.DiagnosePinkSquares();

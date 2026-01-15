@@ -6,7 +6,7 @@ using UnityEditor;
 /// </summary>
 public class QuickSceneValidator : EditorWindow
 {
-    [MenuItem("Dark Descent/🔍 場景驗證/快速檢查")]
+    [MenuItem("DD Debug/🔍 場景驗證/快速檢查")]
     public static void ShowWindow()
     {
         var window = GetWindow<QuickSceneValidator>("場景檢查");

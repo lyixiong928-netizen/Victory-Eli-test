@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UIPanelSetup : EditorWindow
 {
-    [MenuItem("Dark Descent/UI系統/建立完整UI面板系統")]
+    [MenuItem("DD Setup/UI系統/建立完整UI面板系統")]
     public static void CreateFullUIPanelSystem()
     {
         // 1. 建立 Canvas
@@ -204,7 +204,7 @@ public class UIPanelSetup : EditorWindow
         panelButton.action = UIPanelButton.ButtonAction.Toggle;
     }
 
-    [MenuItem("Dark Descent/UI系統/快速建立單一面板")]
+    [MenuItem("DD Setup/UI系統/快速建立單一面板")]
     public static void CreateSinglePanel()
     {
         // 找到或建立 Canvas

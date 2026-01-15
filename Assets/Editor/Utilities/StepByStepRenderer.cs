@@ -10,7 +10,7 @@ public class StepByStepRenderer : EditorWindow
     private int currentStep = 0;
     private GameObject createdObject;
     
-    [MenuItem("Dark Descent/🎓 從零開始/第一個可見物件 #F2")]
+    [MenuItem("DD Setup/🎓 從零開始/第一個可見物件 #F2")]
     public static void ShowWindow()
     {
         var window = GetWindow<StepByStepRenderer>("從零開始");
