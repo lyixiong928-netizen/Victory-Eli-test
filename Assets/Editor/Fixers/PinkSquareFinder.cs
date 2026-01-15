@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PinkSquareFinder : Editor
 {
-    [MenuItem("DarkDescentDemo/除錯工具/分析粉紅色方形")]
+    [MenuItem("Dark Descent/🐛 Debug/Inspector/Find Pink Squares")]
     public static void AnalyzePinkSquares()
     {
         Debug.Log("========== 粉紅色方形分析 ==========\n");
@@ -72,7 +72,7 @@ public class PinkSquareFinder : Editor
         }
     }
     
-    [MenuItem("DarkDescentDemo/除錯工具/為粉紅色物件設定精靈")]
+    [MenuItem("Dark Descent/🐛 Debug/Quick Fix/Fix Sprite References")]
     public static void SetSpritesForPinkObjects()
     {
         // 尋找同命蠱精靈

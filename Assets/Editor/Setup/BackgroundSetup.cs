@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class BackgroundSetup : Editor
 {
-    [MenuItem("DarkDescentDemo/背景設定/創建可點擊背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/創建可點擊背景")]
     public static void CreateClickableBackground()
     {
         // 創建背景物件
@@ -80,7 +80,7 @@ public class BackgroundSetup : Editor
         Debug.Log("🎨 預設 6 種深色調：黑、藍、紅、綠、紫、灰");
     }
     
-    [MenuItem("DarkDescentDemo/背景設定/設定背景為詛咒色調")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/設定背景為詛咒色調")]
     public static void SetCurseColorScheme()
     {
         ClickableBackground bg = Object.FindObjectOfType<ClickableBackground>();
@@ -102,7 +102,7 @@ public class BackgroundSetup : Editor
         Debug.Log("🎭 已設定為詛咒色調");
     }
     
-    [MenuItem("DarkDescentDemo/背景設定/設定背景為彩色模式")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/設定背景為彩色模式")]
     public static void SetColorfulScheme()
     {
         ClickableBackground bg = Object.FindObjectOfType<ClickableBackground>();
@@ -126,7 +126,7 @@ public class BackgroundSetup : Editor
         Debug.Log("🌈 已設定為彩色模式");
     }
     
-    [MenuItem("DarkDescentDemo/背景設定/開啟/關閉隨機模式")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/開啟/關閉隨機模式")]
     public static void ToggleRandomMode()
     {
         ClickableBackground bg = Object.FindObjectOfType<ClickableBackground>();
@@ -140,7 +140,7 @@ public class BackgroundSetup : Editor
         Debug.Log($"🎲 隨機模式: {(bg.randomColor ? "開啟" : "關閉")}");
     }
     
-    [MenuItem("DarkDescentDemo/背景設定/調整背景大小適應畫面")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/調整背景大小適應畫面")]
     public static void AdjustBackgroundSize()
     {
         GameObject background = GameObject.Find("ClickableBackground");
@@ -162,7 +162,7 @@ public class BackgroundSetup : Editor
         }
     }
     
-    [MenuItem("DarkDescentDemo/背景設定/重置背景為黑色")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/重置背景為黑色")]
     public static void ResetBackgroundToBlack()
     {
         ClickableBackground bg = Object.FindObjectOfType<ClickableBackground>();

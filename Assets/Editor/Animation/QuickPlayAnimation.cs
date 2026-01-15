@@ -4,7 +4,7 @@ using System.Linq;
 
 public class QuickPlayAnimation : Editor
 {
-    [MenuItem("DarkDescentDemo/動畫控制/為選中物件設定並播放動畫 %#p")]
+    [MenuItem("Dark Descent/🎬 Animation/Control/Play/Pause %#p")]
     public static void SetupAndPlayAnimation()
     {
         GameObject selected = Selection.activeGameObject;

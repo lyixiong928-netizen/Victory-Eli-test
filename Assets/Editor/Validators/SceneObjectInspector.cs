@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class SceneObjectInspector : Editor
 {
-    [MenuItem("DarkDescentDemo/除錯工具/列出場景中所有物件")]
+    [MenuItem("Dark Descent/🐛 Debug/Inspector/List All Objects")]
     public static void ListAllSceneObjects()
     {
         Debug.Log("========== 場景物件列表 ==========");

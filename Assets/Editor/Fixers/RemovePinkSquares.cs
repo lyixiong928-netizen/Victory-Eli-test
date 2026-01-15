@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class RemovePinkSquares : Editor
 {
-    [MenuItem("DarkDescentDemo/快速修復/刪除所有粉紅色方形")]
+    [MenuItem("Dark Descent/🐛 Debug/Quick Fix/Fix Pink Squares")]
     public static void DeleteAllPinkSquares()
     {
         SpriteRenderer[] allSprites = Object.FindObjectsOfType<SpriteRenderer>();

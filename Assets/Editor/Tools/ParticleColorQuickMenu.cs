@@ -8,89 +8,89 @@ using UnityEditor;
 public class ParticleColorQuickMenu : Editor
 {
     // 快速設定骨骼顏色
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/💀 骨骼 - 白色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/💀 骨骼 - 白色")]
     public static void SetBoneWhite()
     {
         SetColor("boneColor", Color.white, "骨骼白色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/💀 骨骼 - 米白色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/💀 骨骼 - 米白色")]
     public static void SetBoneBeige()
     {
         SetColor("boneColor", new Color(0.9f, 0.9f, 0.8f, 1f), "骨骼米白色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/💀 骨骼 - 金色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/💀 骨骼 - 金色")]
     public static void SetBoneGold()
     {
         SetColor("boneColor", new Color(1f, 0.84f, 0f, 1f), "骨骼金色");
     }
     
     // 快速設定霧氣顏色
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/🌫️ 霧氣 - 黑色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/🌫️ 霧氣 - 黑色")]
     public static void SetFogBlack()
     {
         SetColor("fogColor", new Color(0.1f, 0.1f, 0.1f, 0.5f), "黑霧");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/🌫️ 霧氣 - 紫色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/🌫️ 霧氣 - 紫色")]
     public static void SetFogPurple()
     {
         SetColor("fogColor", new Color(0.5f, 0f, 0.5f, 0.5f), "紫色霧");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/🌫️ 霧氣 - 藍色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/🌫️ 霧氣 - 藍色")]
     public static void SetFogBlue()
     {
         SetColor("fogColor", new Color(0.2f, 0.3f, 0.6f, 0.5f), "藍色霧");
     }
     
     // 快速設定靈魂顏色
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/✨ 靈魂 - 藍白色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/✨ 靈魂 - 藍白色")]
     public static void SetSoulBlueWhite()
     {
         SetColor("soulColor", new Color(0.5f, 0.8f, 1f, 1f), "靈魂藍白色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/✨ 靈魂 - 青色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/✨ 靈魂 - 青色")]
     public static void SetSoulCyan()
     {
         SetColor("soulColor", new Color(0f, 1f, 1f, 1f), "靈魂青色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/✨ 靈魂 - 金色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/✨ 靈魂 - 金色")]
     public static void SetSoulGold()
     {
         SetColor("soulColor", new Color(1f, 0.9f, 0.3f, 1f), "靈魂金色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/✨ 靈魂 - 粉紅色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/✨ 靈魂 - 粉紅色")]
     public static void SetSoulPink()
     {
         SetColor("soulColor", new Color(1f, 0.4f, 0.7f, 1f), "靈魂粉紅色");
     }
     
     // 快速設定生物顏色
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/👻 生物 - 暗紅色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/👻 生物 - 暗紅色")]
     public static void SetCreatureDarkRed()
     {
         SetColor("creatureColor", new Color(0.6f, 0.2f, 0.2f, 0.7f), "生物暗紅色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/👻 生物 - 綠色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/👻 生物 - 綠色")]
     public static void SetCreatureGreen()
     {
         SetColor("creatureColor", new Color(0.2f, 0.6f, 0.2f, 0.7f), "生物綠色");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/顏色設定/👻 生物 - 紫色")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Color Presets/👻 生物 - 紫色")]
     public static void SetCreaturePurple()
     {
         SetColor("creatureColor", new Color(0.6f, 0.2f, 0.6f, 0.7f), "生物紫色");
     }
     
     // 主題快捷設定
-    [MenuItem("DarkDescentDemo/粒子系統/主題設定/🎃 萬聖節主題")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Themes/🎃 萬聖節主題")]
     public static void ApplyHalloweenTheme()
     {
         var manager = FindObjectOfType<ParticleEffectManager>();
@@ -113,7 +113,7 @@ public class ParticleColorQuickMenu : Editor
         Debug.Log("🎃 已套用萬聖節主題");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/主題設定/❄️ 冰霜主題")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Themes/❄️ 冰霜主題")]
     public static void ApplyFrostTheme()
     {
         var manager = FindObjectOfType<ParticleEffectManager>();
@@ -136,7 +136,7 @@ public class ParticleColorQuickMenu : Editor
         Debug.Log("❄️ 已套用冰霜主題");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/主題設定/🔥 火焰主題")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Themes/🔥 火焰主題")]
     public static void ApplyFireTheme()
     {
         var manager = FindObjectOfType<ParticleEffectManager>();
@@ -159,7 +159,7 @@ public class ParticleColorQuickMenu : Editor
         Debug.Log("🔥 已套用火焰主題");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/主題設定/🌸 櫻花主題")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Themes/🌸 櫻花主題")]
     public static void ApplyBlossomTheme()
     {
         var manager = FindObjectOfType<ParticleEffectManager>();
@@ -182,7 +182,7 @@ public class ParticleColorQuickMenu : Editor
         Debug.Log("🌸 已套用櫻花主題");
     }
     
-    [MenuItem("DarkDescentDemo/粒子系統/主題設定/⚫ 原始黑暗主題")]
+    [MenuItem("Dark Descent/✨ Effects/Particles/Themes/⚫ 原始黑暗主題")]
     public static void ApplyDefaultTheme()
     {
         var manager = FindObjectOfType<ParticleEffectManager>();

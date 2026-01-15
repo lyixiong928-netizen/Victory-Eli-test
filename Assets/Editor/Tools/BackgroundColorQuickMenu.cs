@@ -8,66 +8,66 @@ using UnityEditor;
 public class BackgroundColorQuickMenu : Editor
 {
     // 快速切換到白色背景（讓深色物件可見）
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/⚪ 白色背景（深色物件可見）")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color⚪ 白色背景（深色物件可見）")]
     public static void SetWhiteBackground()
     {
         SetBackgroundColor(Color.white, 1f, "白色背景");
     }
     
     // 快速切換到黑色背景（讓淺色/紅色物件可見）
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/⚫ 黑色背景（紅色物件可見）")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color⚫ 黑色背景（紅色物件可見）")]
     public static void SetBlackBackground()
     {
         SetBackgroundColor(Color.black, 1f, "黑色背景");
     }
     
     // 深色背景選項
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/🔴 深紅背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color🔴 深紅背景")]
     public static void SetDarkRedBackground()
     {
         SetBackgroundColor(new Color(0.2f, 0f, 0f, 1f), 1f, "深紅背景");
     }
     
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/🔵 深藍背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color🔵 深藍背景")]
     public static void SetDarkBlueBackground()
     {
         SetBackgroundColor(new Color(0f, 0f, 0.2f, 1f), 1f, "深藍背景");
     }
     
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/🟢 深綠背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color🟢 深綠背景")]
     public static void SetDarkGreenBackground()
     {
         SetBackgroundColor(new Color(0f, 0.2f, 0f, 1f), 1f, "深綠背景");
     }
     
     // 灰階選項
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/⬜ 淺灰背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color⬜ 淺灰背景")]
     public static void SetLightGrayBackground()
     {
         SetBackgroundColor(new Color(0.7f, 0.7f, 0.7f, 1f), 1f, "淺灰背景");
     }
     
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/⬛ 深灰背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color⬛ 深灰背景")]
     public static void SetDarkGrayBackground()
     {
         SetBackgroundColor(new Color(0.3f, 0.3f, 0.3f, 1f), 1f, "深灰背景");
     }
     
     // 透明背景選項
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/👁️ 半透明黑色")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color👁️ 半透明黑色")]
     public static void SetTransparentBlack()
     {
         SetBackgroundColor(Color.black, 0.5f, "半透明黑色");
     }
     
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/👁️ 半透明白色")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color👁️ 半透明白色")]
     public static void SetTransparentWhite()
     {
         SetBackgroundColor(Color.white, 0.5f, "半透明白色");
     }
     
     // 特殊效果
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/🌈 彩虹漸層（動畫）")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color🌈 彩虹漸層（動畫）")]
     public static void EnableRainbowBackground()
     {
         var manager = FindObjectOfType<BackgroundManager>();
@@ -86,7 +86,7 @@ public class BackgroundColorQuickMenu : Editor
     }
     
     // 隱藏/顯示背景
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/👻 隱藏背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color👻 隱藏背景")]
     public static void HideBackground()
     {
         var manager = FindObjectOfType<BackgroundManager>();
@@ -104,7 +104,7 @@ public class BackgroundColorQuickMenu : Editor
         }
     }
     
-    [MenuItem("DarkDescentDemo/視覺效果/背景顏色/👁️ 顯示背景")]
+    [MenuItem("Dark Descent/🎨 Scene Setup/Background/Set Color👁️ 顯示背景")]
     public static void ShowBackground()
     {
         var manager = FindObjectOfType<BackgroundManager>();

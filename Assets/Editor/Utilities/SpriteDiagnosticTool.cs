@@ -12,7 +12,7 @@ public class SpriteDiagnosticTool : EditorWindow
     private TextureImporter targetImporter;
     private string targetPath = "Assets/Sprites/建立影像 同命蠱.png";
     
-    [MenuItem("DarkDescentDemo/診斷工具/🔍 精靈切片診斷器")]
+    [MenuItem("Dark Descent/🔧 Tools/Sprite/Diagnostic")]
     public static void ShowWindow()
     {
         var window = GetWindow<SpriteDiagnosticTool>("精靈切片診斷");
