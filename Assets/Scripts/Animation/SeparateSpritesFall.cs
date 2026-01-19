@@ -53,18 +53,29 @@ public class SeparateSpritesFall : MonoBehaviour
     {
         fallController = GetComponent<DarkDescentController>();
         
-        // 找到 CharacterSprite 子物件
+        // 找到 CharacterSprite 子物件（可選）
         childSpriteTransform = transform.Find("CharacterSprite");
         
         if (childSpriteTransform == null)
         {
-            Debug.LogWarning("[SeparateSpritesFall] 找不到 CharacterSprite 子物件");
+            // 如果沒有子物件，嘗試使用自己的 SpriteRenderer
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr == null)
+            {
+                Debug.LogWarning("[SeparateSpritesFall] 找不到 CharacterSprite 子物件，也沒有 SpriteRenderer");
+            }
         }
         
         // 如果沒有設定精靈陣列，嘗試自動載入
         if (spritesToSeparate == null || spritesToSeparate.Length == 0)
         {
             LoadDefaultSprites();
+        }
+        
+        // 如果還是沒有精靈，顯示提示
+        if (spritesToSeparate == null || spritesToSeparate.Length == 0)
+        {
+            Debug.LogWarning("[SeparateSpritesFall] 請在 Inspector 中設定 Sprites To Separate 陣列");
         }
     }
     
