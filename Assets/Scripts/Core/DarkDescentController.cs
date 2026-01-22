@@ -74,10 +74,13 @@ public class DarkDescentController : MonoBehaviour
     public float boneFragmentLifetime = 2f;
     
     [Header("精靈動畫設定")]
-    [Tooltip("動畫用的精靈圖片陣列（將切片幀拖入此處）")]
+    [Tooltip("動畫用的精靈圖片陣列\n1張=靜態\n2張=循環動畫\n3張=對應三個角色(女子/骷髏/生物)")]
     public Sprite[] animationSprites;
     
-    [Tooltip("每秒播放幾幀 (FPS)")]
+    [Tooltip("當有3張圖時，自動切換角色 (0=女子 1=骷髏 2=生物)")]
+    public bool useSpritesAsCharacters = true;
+    
+    [Tooltip("每秒播放幾幀 (FPS) - 僅用於2張以上且不作為角色時")]
     [Range(1, 60)]
     public int framesPerSecond = 12;
     
@@ -173,26 +176,29 @@ public class DarkDescentController : MonoBehaviour
         // 初始化動畫
         currentFrame = 0;
         animationTimer = 0f;
-        if (animationSprites != null && animationSprites.Length > 0 && spriteRenderer != null)
+        
+        // 如果有3張圖且啟用自動角色切換，根據當前角色顯示對應圖片
+        if (animationSprites != null && animationSprites.Length == 3 && useSpritesAsCharacters && spriteRenderer != null)
+        {
+            int spriteIndex = (int)character; // 0=CursedGirl, 1=Skeleton, 2=DarkCreature
+            if (spriteIndex < animationSprites.Length)
+            {
+                spriteRenderer.sprite = animationSprites[spriteIndex];
+                Debug.Log($"使用第 {spriteIndex + 1} 張圖對應角色: {character}");
+            }
+        }
+        else if (animationSprites != null && animationSprites.Length > 0 && spriteRenderer != null)
         {
             spriteRenderer.sprite = animationSprites[0];
         }
         
-        // 啟動墜落時的視覺效果（根據角色類型配置參數）
-        // Coding Pair：自動診斷和修復粒子系統問題
-        bool particlesReady = DiagnoseAndFixParticleSystems();
-        
-        if (!particlesReady)
-        {
-            Debug.LogWarning("[Coding Pair] 粒子系統配置失敗，嘗試自動修復...");
-            ForceUnlockAndReconfigureParticles();
-        }
+        // 啟動粒子效果
+        ConfigureAndStartParticleSystems();
         
         // 啟動同命蠱連結特效
         if (showCurseLink && curseLinkParticles) 
         {
             curseLinkParticles.Play();
-
         }
         
         // 播放風聲音效（循環播放）
@@ -206,61 +212,29 @@ public class DarkDescentController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Update：Unity 每一幀都會呼叫（約 60 次/秒）
-    /// 用於處理遊戲邏輯、物理模擬和玩家輸入
-    /// </summary>
     void Update()
     {
-        // 只有在角色還沒著地時，才執行墜落邏輯
         if (!hasLanded)
         {
-            // 累計墜落時間
             fallTime += Time.deltaTime;
             
-            // === 物理模擬：計算墜落速度 ===
-            
-            // 1. 重力加速：速度 = 速度 + 加速度 × 時間
-            //    每秒速度增加 gravity 的值（例如 9.8 米/秒）
+            // 基本重力加速
             currentVelocity += gravity * Time.deltaTime;
-            
-            // 2. 空氣阻力：阻力與速度的平方成正比（真實物理）
-            //    速度越快，阻力越大，最終達到終端速度
-            float drag = airResistance * currentVelocity * currentVelocity;
-            currentVelocity -= drag * Time.deltaTime;
-            
-            // 3. 限制最大速度：避免無限加速穿透地面
             currentVelocity = Mathf.Min(currentVelocity, maxFallSpeed);
             
-            // 記錄達到的最大速度（用於統計）
-            if (currentVelocity > maxVelocityReached)
-                maxVelocityReached = currentVelocity;
-            
-            // 4. 計算本幀移動距離
+            // 向下移動
             float moveDistance = currentVelocity * Time.deltaTime;
             fallDistance += moveDistance;
-            
-            // 5. 根據速度移動角色（向下移動）
-            //    Vector3.down = (0, -1, 0)
             transform.position += Vector3.down * moveDistance;
 
-            // === 視覺效果：旋轉動畫 ===
-            
-            // 如果啟用旋轉，讓角色在墜落時繞 Z 軸旋轉
-            // 產生翻滾墜落的視覺效果
+            // 旋轉
             if (rotateWhileFalling)
                 transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
             
-            // === 精靈動畫更新 ===
+            // 動畫
             UpdateSpriteAnimation();
-            
-            // === 動態調整粒子效果（根據速度）===
-            UpdateParticleSystemsBasedOnVelocity();
 
-            // === 著地檢測 ===
-            
-            // 如果角色的 Y 座標降到 0 或以下，觸發著地事件
-            // 在實際遊戲中可能需要使用 Collider 檢測
+            // 著地檢測
             if (transform.position.y <= 0)
                 OnLanding();
         }
@@ -278,7 +252,6 @@ public class DarkDescentController : MonoBehaviour
         // 按下 R 鍵：重置墜落（重新開始）
         if (Input.GetKeyDown(KeyCode.R))
         {
-
             ResetFall();
         }
         
@@ -286,7 +259,6 @@ public class DarkDescentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             showDebugInfo = !showDebugInfo;
-
         }
     }
     
@@ -295,8 +267,11 @@ public class DarkDescentController : MonoBehaviour
     /// </summary>
     void UpdateSpriteAnimation()
     {
-        // 如果沒有設定動畫精靈，直接返回
         if (animationSprites == null || animationSprites.Length == 0 || spriteRenderer == null)
+            return;
+        
+        // 如果是3張圖且作為角色使用，不播放動畫，保持靜態顯示
+        if (animationSprites.Length == 3 && useSpritesAsCharacters)
             return;
         
         // 計算每幀的時間
@@ -434,9 +409,23 @@ public class DarkDescentController : MonoBehaviour
         // Quaternion.identity 代表沒有旋轉（0, 0, 0）
         transform.rotation = Quaternion.identity;
         
-        // 重置動畫狀態
+        
+        // 根據設定顯示對應圖片
+        if (animationSprites != null && animationSprites.Length == 3 && useSpritesAsCharacters && spriteRenderer != null)
+        {
+            int spriteIndex = (int)character;
+            if (spriteIndex < animationSprites.Length)
+            {
+                spriteRenderer.sprite = animationSprites[spriteIndex];
+            }
+        }
+        else // 重置動畫狀態
         currentFrame = 0;
         animationTimer = 0f;
+        if (animationSprites != null && animationSprites.Length > 0 && spriteRenderer != null)
+        {
+            spriteRenderer.sprite = animationSprites[0];
+        }
         
         // 先停止所有粒子並清空（使用 StopEmittingAndClear 確保乾淨）
         if (darkFog) darkFog.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -665,104 +654,49 @@ public class DarkDescentController : MonoBehaviour
     /// </summary>
     private bool ConfigureAndStartParticleSystems()
     {
-        bool particlesConfigured = false;
-        
-        // 使用預設配置對應表（實際數值，不是空話）
         switch (character)
         {
             case CharacterType.Skeleton:
-                // 對應：骷髏墜落 = 75粒/s × 1.6s × 5m/s → 密集骨碎
                 if (boneFragments)
                 {
                     ParticleEffectPresets.ApplySkeletonFalling(boneFragments);
-                    
-                    // 驗證配置是否正確應用
-                    float difference = ParticleEffectPresets.ValidateParticleSystem(
-                        boneFragments, "SkeletonFalling", out string warning);
-                    
-                    if (difference > 50f)
-                    {
-                        Debug.LogError($"[配置驗證] boneFragments {warning}");
-                        // 自動修復
-                        ParticleEffectPresets.AutoDetectAndApplyBestPreset(boneFragments, character, forceApply: true);
-                    }
-                    else if (difference > 30f)
-                    {
-                        Debug.LogWarning($"[配置驗證] boneFragments {warning}");
-                    }
-                    else if (showDebugInfo)
-                    {
-                        Debug.Log($"[配置驗證] boneFragments {warning}");
-                    }
-                    
-                    particlesConfigured = true;
+                    boneFragments.Play();
                 }
-                
-                // 對應：淺灰霧 = 40粒/s基礎率
                 if (darkFog)
                 {
                     ParticleEffectPresets.ApplySpeedBasedFog(darkFog, 0f, maxFallSpeed, 40f);
+                    darkFog.Play();
                 }
                 break;
                 
             case CharacterType.CursedGirl:
-                // 對應：女子飄散 = 30粒/s × 3s × 2m/s → 優雅靈魂
                 if (boneFragments)
                 {
                     ParticleEffectPresets.ApplyCursedGirlFalling(boneFragments);
-                    
-                    // 驗證邏輯差異
-                    float diffGirl = ParticleEffectPresets.ValidateParticleSystem(
-                        boneFragments, "CursedGirlFalling", out string warnGirl);
-                    
-                    if (diffGirl > 50f)
-                        Debug.LogError($"[驗證] {warnGirl}");
-                    else if (diffGirl > 30f)
-                        Debug.LogWarning($"[驗證] {warnGirl}");
-                    
-                    particlesConfigured = true;
+                    boneFragments.Play();
                 }
-                
-                // 對應：紫霧 = 30粒/s × 紫色(0.5,0.3,0.6) → 詛咒氛圍
                 if (darkFog)
                 {
                     ParticleEffectPresets.ApplyCursedGirlFog(darkFog);
+                    darkFog.Play();
                 }
                 break;
                 
             case CharacterType.DarkCreature:
-                // 對應：黑暗濃霧 = 80粒/s × 3倍尺寸 × 黑色 → 壓迫感
                 if (darkFog)
                 {
                     ParticleEffectPresets.ApplyDarkCreatureFog(darkFog);
-                    
-                    // 驗證邏輯差異
-                    float diffDark = ParticleEffectPresets.ValidateParticleSystem(
-                        darkFog, "DarkCreatureFog", out string warnDark);
-                    
-                    if (diffDark > 50f)
-                        Debug.LogError($"[驗證] {warnDark}");
-                    else if (diffDark > 30f)
-                        Debug.LogWarning($"[驗證] {warnDark}");
-                    
-                    particlesConfigured = true;
+                    darkFog.Play();
                 }
-                
-                // 對應：怨念碎片 = 50粒/s × 暗色 → 纏繞效果
                 if (boneFragments)
                 {
                     ParticleEffectPresets.ApplyDarkCreatureFragments(boneFragments);
+                    boneFragments.Play();
                 }
                 break;
         }
         
-        // 如果沒有配置任何粒子系統，發出警告
-        if (!particlesConfigured)
-        {
-            Debug.LogWarning($"[粒子系統] {character} 沒有配置任何粒子效果！請檢查 Inspector");
-        }
-        
-        return particlesConfigured;
+        return boneFragments != null || darkFog != null;
     }
     
     /// <summary>

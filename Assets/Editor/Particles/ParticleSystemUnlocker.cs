@@ -284,17 +284,16 @@ public class ParticleSystemUnlocker : EditorWindow
 /// </summary>
 public class ParticleSystemContextMenu
 {
-    [MenuItem("CONTEXT/ParticleSystem/🔓 解鎖此粒子系統")]
-    static void UnlockThisParticleSystem(MenuCommand command)
+    [MenuItem("CONTEXT/ParticleSystemRenderer/🔓 解鎖")]
+    static void UnlockParticleSystemFromRenderer(MenuCommand command)
     {
-        ParticleSystem ps = command.context as ParticleSystem;
-        if (ps != null)
+        ParticleSystemRenderer renderer = command.context as ParticleSystemRenderer;
+        if (renderer != null)
         {
-            if (ParticleSystemUnlocker.ForceResetParticleSystem(ps))
+            ParticleSystem ps = renderer.GetComponent<ParticleSystem>();
+            if (ps != null && ParticleSystemUnlocker.ForceResetParticleSystem(ps))
             {
-                Debug.Log($"[Coding Pair] ✓ {ps.gameObject.name} 已解鎖");
-                EditorUtility.DisplayDialog("解鎖成功", 
-                    $"{ps.gameObject.name} 的粒子系統已解鎖\n現在可以修改參數了", "確定");
+                Debug.Log($"✓ {ps.gameObject.name} 已解鎖");
             }
         }
     }

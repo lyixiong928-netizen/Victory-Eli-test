@@ -38,6 +38,15 @@ public class SeparateSpritesFall : MonoBehaviour
     [Tooltip("分離時的顏色")]
     public Color separatedColor = Color.white;
     
+    [Header("分批墜落設定")]
+    [Tooltip("分成幾批墜落（例如：3批）")]
+    [Range(1, 10)]
+    public int batchCount = 3;
+    
+    [Tooltip("每批之間的延遲時間（秒）")]
+    [Range(0.05f, 2f)]
+    public float batchDelay = 0.2f;
+    
     [Header("觸發設定")]
     [Tooltip("觸發分離的按鍵")]
     public KeyCode triggerKey = KeyCode.Space;
@@ -122,13 +131,39 @@ public class SeparateSpritesFall : MonoBehaviour
             }
         }
         
-        // 為每個精靈創建獨立的墜落物件
-        for (int i = 0; i < spritesToSeparate.Length; i++)
-        {
-            CreateSeparatedSprite(spritesToSeparate[i], i);
-        }
+        // 啟動分批墜落協程
+        StartCoroutine(SeparateInBatches());
         
-        Debug.Log($"✅ [SeparateSpritesFall] 已分離 {spritesToSeparate.Length} 個精靈");
+        Debug.Log($"✅ [SeparateSpritesFall] 開始分 {batchCount} 批分離 {spritesToSeparate.Length} 個精靈");
+    }
+    
+    /// <summary>
+    /// 分批墜落協程
+    /// </summary>
+    System.Collections.IEnumerator SeparateInBatches()
+    {
+        int totalSprites = spritesToSeparate.Length;
+        int spritesPerBatch = Mathf.CeilToInt((float)totalSprites / batchCount);
+        
+        for (int batch = 0; batch < batchCount; batch++)
+        {
+            int startIndex = batch * spritesPerBatch;
+            int endIndex = Mathf.Min(startIndex + spritesPerBatch, totalSprites);
+            
+            // 創建這一批的精靈
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                CreateSeparatedSprite(spritesToSeparate[i], i);
+            }
+            
+            Debug.Log($"🎯 第 {batch + 1} 批：分離精靈 {startIndex} 到 {endIndex - 1}");
+            
+            // 如果不是最後一批，等待延遲時間
+            if (batch < batchCount - 1)
+            {
+                yield return new WaitForSeconds(batchDelay);
+            }
+        }
     }
     
     /// <summary>

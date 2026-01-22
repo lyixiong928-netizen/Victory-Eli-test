@@ -1,12 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// 角色動畫控制器 - 墜落運動
+/// 簡單墜落 - 純粹的物理運動，沒有複雜邏輯
 /// </summary>
-[RequireComponent(typeof(SpriteRenderer))]
-public class CharacterAnimator : MonoBehaviour
+public class SimpleFall : MonoBehaviour
 {
-    [Header("墜落設定")]
+    [Header("基本設置")]
     public float startHeight = 10f;
     public float gravity = 9.8f;
     
@@ -21,7 +20,7 @@ public class CharacterAnimator : MonoBehaviour
     
     void Update()
     {
-        // 重力加速
+        // 簡單的重力加速
         velocity += gravity * Time.deltaTime;
         
         // 向下移動
